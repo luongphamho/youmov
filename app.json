@@ -1,32 +1,24 @@
 {
   "expo": {
-    "name": "youmov",
-    "slug": "youmov",
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "name": "YouMov",
+    "slug": "your-movies - Nhom7",
+    "description": "Find and Watch movies free",
     "version": "1.0.0",
+    "privacy": "public",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./app/assets/images/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./app/assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "supportsTablet": false
     }
   }
 }
