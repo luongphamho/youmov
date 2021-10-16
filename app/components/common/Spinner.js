@@ -1,24 +1,25 @@
 import React from 'react';
 import { Platform, ActivityIndicator, View } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
-import { darkBlue } from '../../utils/colors';
-
-const Spinner = ({ style = {}, size = 50, color = darkBlue }) => (
+const Spinner = ({ style = {}, size = 50 }) => {
+  const {colors} = useTheme();
+  return(
   <View style={style}>
     {Platform.OS === 'ios' ? (
       <ActivityIndicator
         testID="activity-indicator"
         size="small"
-        color={color}
+        color={colors.darkBlue}
       />
     ) : (
       <ActivityIndicator
         testID="activity-indicator"
         size={size}
-        color={color}
+        color={colors.darkBlue}
       />
     )}
   </View>
-);
+)};
 
 export default Spinner;

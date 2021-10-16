@@ -10,10 +10,11 @@ import { ROUTES } from '../../navigation/routes';
 import genres from '../../data/genres.json';
 
 import styles from './styles';
+import { useTheme } from '@react-navigation/native';
 
 const Search = ({ navigation }) => {
   const { navigate } = navigation;
-
+  const {colors} = useTheme()
   const handleSearch = (id) => {
     navigate(ROUTES.SEARCH_RESULTS, {
       typeRequest: 'discover',
@@ -24,7 +25,7 @@ const Search = ({ navigation }) => {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      <View style={{...styles.container, backgroundColor: colors.white}}>
         <InputSearch navigate={navigate} />
         <ScrollView style={styles.containerList}>
           {Object.keys(genres).map((id) => (
@@ -33,7 +34,7 @@ const Search = ({ navigation }) => {
               style={styles.item}
               onPress={() => handleSearch(id)}
             >
-              <Text style={styles.itemText}>{genres[id].name}</Text>
+              <Text style={{...styles.itemText, color:colors.darkBlue}}>{genres[id].name}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>

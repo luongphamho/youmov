@@ -1,21 +1,22 @@
 import React from 'react';
 import { Switch } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
-import { gray, darkBlue } from '../../utils/colors';
 
 const SwitchCustom = ({
   accessibilityLabel = '',
   value = false,
   onValueChange = () => null,
-  trackColor = { false: gray, true: darkBlue },
-}) => (
+}) => {
+  const {colors} = useTheme();
+  return(
   <Switch
     accessibilityLabel={accessibilityLabel}
     accessibilityRole="switch"
     value={value}
     onValueChange={onValueChange}
-    trackColor={trackColor}
+    trackColor={{ false: colors.gray, true: colors.darkBlue }}
   />
-);
+)};
 
 export { SwitchCustom as Switch };

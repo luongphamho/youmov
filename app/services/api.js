@@ -3,7 +3,7 @@ const key = '0364086005fd007ac1e75657c3673c08';
 
 const defaultContent = {
   api_key: key,
-  language: 'vi-VN'
+  language: 'en-EN'
 };
 function setDefaultContent(){
   
@@ -19,6 +19,6 @@ export default async function request(url, content = {}, debug = false) {
 
   const response = await fetch(`${api}/${url}?${queryString(obj)}`);
   const data = await (debug ? response.status : response.json());
-
+  // console.log(data)
   return data;
 }

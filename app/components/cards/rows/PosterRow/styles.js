@@ -5,7 +5,6 @@ import {
   getResponsiveWidth
 } from '../../../../utils/dimensions';
 
-import { white, pink } from '../../../../utils/colors';
 
 /* eslint-disable react-native/no-color-literals */
 
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
     bottom: -20,
     right: 15,
     borderRadius: getResponsiveWidth(32),
-    backgroundColor: pink,
     width: getResponsiveWidth(16),
     height: getResponsiveWidth(16),
     justifyContent: 'center',
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
   },
   photoInfo: {
     fontSize: getResponsiveFontSize(3.8),
-    color: white,
+    // color: white
     fontWeight: 'bold'
   },
   photoStar: {

@@ -28,7 +28,8 @@ import { sliceArrayLength } from '../../utils/array';
 
 import isoLanguage from '../../data/iso.json';
 
-import { darkBlue } from '../../utils/colors';
+
+import { useTheme } from '@react-navigation/native';
 
 import styles from './styles';
 
@@ -59,13 +60,16 @@ const ADULT_RATE = {
   false: 'Yes'
 };
 
-const renderReadMoreFooter = (text, handlePress) => (
+const renderReadMoreFooter = (text, handlePress) => { 
+  // const {colors} = useTheme()
+  return(
   <TouchableOpacity onPress={handlePress}>
-    <Text style={styles.readMore}>{text}</Text>
+    <Text style={{...styles.readMore, color: "#f95f62"}}>{text}</Text>
   </TouchableOpacity>
-);
+)};
 
 const MovieDetails = ({ navigation, route }) => {
+  const {colors} = useTheme()
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [showImage, setShowImage] = useState(false);
@@ -161,9 +165,9 @@ const MovieDetails = ({ navigation, route }) => {
     <PersonRow item={item} type={type} onTeamDetail={handleTeamDetail} />
   );
 
-  const renderListEmpty = () => (
+  const renderListEmpty = (colors) => (
     <View>
-      <Text style={styles.subTitleInfo}>Uninformed</Text>
+      <Text style={{...styles.subTitleInfo, color: colors.blue,}}>Uninformed</Text>
     </View>
   );
 
@@ -174,7 +178,7 @@ const MovieDetails = ({ navigation, route }) => {
           style={styles.buttonShare}
           onPress={() => handleShare(route.params.title, route.params.id)}
         >
-          <Feather name="share" size={23} color={darkBlue} />
+          <Feather name="share" size={23} color={colors.darkBlue} />
         </TouchableOpacity>
       )
     });
@@ -200,7 +204,7 @@ const MovieDetails = ({ navigation, route }) => {
 
     return (
       <Screen>
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: colors.white}}>
           {isLoading ? (
             <Spinner />
           ) : isError ? (
@@ -231,7 +235,7 @@ const MovieDetails = ({ navigation, route }) => {
                       renderReadMoreFooter('Read less', handlePress)
                     }
                   >
-                    <Text style={styles.subTitleInfo}>{overview}</Text>
+                    <Text style={{...styles.subTitleInfo, color: colors.blue,}}>{overview}</Text>
                   </ReadMore>
                 </SectionRow>
                 <SectionRow title="Main cast">

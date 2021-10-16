@@ -1,15 +1,17 @@
 import React, { forwardRef, useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-
+import { useTheme } from '@react-navigation/native';
 import { Modal } from '../Modal';
 import { TouchableOpacity } from '../../common/TouchableOpacity';
 import { Switch } from '../../common/Switch';
 
 import styles from './styles';
 
-const Filter = ({ title, type, selected, onChange }) => (
+const Filter = ({ title, type, selected, onChange }) => {
+  const {colors} = useTheme();
+  return(
   <View style={styles.containerRow}>
-    <Text style={styles.optionTitle} numberOfLines={2}>
+    <Text style={{...styles.optionTitle, color: colors.darkBlue}} numberOfLines={2}>
       {title}
     </Text>
     <Switch
@@ -18,7 +20,7 @@ const Filter = ({ title, type, selected, onChange }) => (
       onValueChange={() => onChange(type, title)}
     />
   </View>
-);
+)};
 
 const FilterModal = forwardRef(
   ({ filter, onVisible, onFilter, style }, ref) => {
@@ -31,15 +33,15 @@ const FilterModal = forwardRef(
     const changeValues = (type, name) => {
       setFilters({ type, name });
     };
-
+    const {colors} = useTheme();
     return (
       <Modal ref={ref} onClose={onVisible} style={style}>
-        <View style={styles.containerModal}>
-          <Text style={styles.modalTitle}>Filter</Text>
+        <View style={{...styles.containerModal, backgroundColor: colors.white}}>
+          <Text style={{...styles.modalTitle, color: colors.darkBlue}}>Filter</Text>
           <ScrollView>
             <View style={styles.containerScroll}>
               <View style={styles.containerSection}>
-                <Text style={styles.optionSectionTitle} numberOfLines={2}>
+                <Text style={{...styles.optionSectionTitle, color: colors.darkBlue}} numberOfLines={2}>
                   Date
                 </Text>
                 <Filter
@@ -56,7 +58,7 @@ const FilterModal = forwardRef(
                 />
               </View>
               <View style={styles.containerSection}>
-                <Text style={styles.optionSectionTitle} numberOfLines={2}>
+                <Text style={{...styles.optionSectionTitle, color: colors.darkBlue}} numberOfLines={2}>
                   Popularity
                 </Text>
                 <Filter
@@ -73,7 +75,7 @@ const FilterModal = forwardRef(
                 />
               </View>
               <View>
-                <Text style={styles.optionSectionTitle} numberOfLines={2}>
+                <Text style={{...styles.optionSectionTitle, color: colors.darkBlue}} numberOfLines={2}>
                   Revenue
                 </Text>
                 <Filter
@@ -93,10 +95,10 @@ const FilterModal = forwardRef(
           </ScrollView>
           <View style={styles.containerButton}>
             <TouchableOpacity
-              style={[styles.button, styles.buttonSave]}
+              style={[styles.button, styles.buttonSave, {backgroundColor: colors.darkBlue, borderColor: colors.darkBlue}]}
               onPress={() => onFilter(filters)}
             >
-              <Text style={[styles.buttonText, styles.buttonTextSave]}>
+              <Text style={[styles.buttonText, styles.buttonTextSave, {color: colors.white}]}>
                 Confirm
               </Text>
             </TouchableOpacity>

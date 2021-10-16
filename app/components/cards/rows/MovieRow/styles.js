@@ -2,15 +2,6 @@ import { StyleSheet } from 'react-native';
 
 import { getResponsiveFontSize } from '../../../../utils/dimensions';
 
-import {
-  darkBlue,
-  blue,
-  white,
-  lightRed,
-  lightYellow,
-  lightGreen
-} from '../../../../utils/colors';
-
 const styles = StyleSheet.create({
   containerItem: {
     paddingRight: 20,
@@ -38,13 +29,11 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: getResponsiveFontSize(2.6),
-    color: darkBlue,
     fontWeight: 'bold'
   },
   textTwoTitle: {
     textAlign: 'center',
     fontSize: getResponsiveFontSize(2),
-    color: darkBlue,
     fontWeight: 'bold',
     paddingRight: 20,
     paddingLeft: 20,
@@ -63,13 +52,11 @@ const styles = StyleSheet.create({
   },
   textSmall: {
     fontSize: getResponsiveFontSize(2.1),
-    color: blue
   },
   trace: {
     marginLeft: 5,
     marginRight: 5,
     fontSize: getResponsiveFontSize(2.1),
-    color: blue
   },
   score: {
     minWidth: '25%',
@@ -77,19 +64,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderRadius: 100
   },
-  low: {
-    backgroundColor: lightRed
-  },
-  mid: {
-    backgroundColor: lightYellow
-  },
-  high: {
-    backgroundColor: lightGreen
-  },
   textPercent: {
     fontSize: getResponsiveFontSize(2.1),
     fontWeight: '500',
-    color: white,
     textAlign: 'center'
   },
   containerModal: {
@@ -101,7 +78,7 @@ const styles = StyleSheet.create({
     margin: 0
   },
   containerError: {
-    backgroundColor: white,
+    // backgroundColor: white,
     alignItems: 'center',
     justifyContent: 'center'
   },

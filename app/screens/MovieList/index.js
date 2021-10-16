@@ -17,11 +17,12 @@ import request from '../../services/api';
 import { getItem } from '../../utils/asyncStorage';
 import { getTodayDate } from '../../utils/dates';
 
-import { darkBlue } from '../../utils/colors';
+import { useTheme } from '@react-navigation/native';
 
 import styles from './styles';
 
 const MovieList = ({ navigation, route }) => {
+  const {colors} = useTheme()
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
@@ -134,10 +135,10 @@ const MovieList = ({ navigation, route }) => {
       return (
         <View style={styles.loadingMore}>
           <TouchableOpacity
-            style={styles.loadingButton}
+            style={{...styles.loadingButton, borderColor: colors.lightGray}}
             onPress={handleLoadMore}
           >
-            <Text style={styles.loadingText}>Load more</Text>
+            <Text style={{...styles.loadingText, color: colors.darkBlue,}}>Load more</Text>
           </TouchableOpacity>
         </View>
       );
@@ -155,7 +156,7 @@ const MovieList = ({ navigation, route }) => {
           style={styles.buttonFilter}
           onPress={handleFilterModal}
         >
-          <Feather name="filter" size={23} color={darkBlue} />
+          <Feather name="filter" size={23} color={colors.darkBlue} />
         </TouchableOpacity>
       )
     });
@@ -184,7 +185,7 @@ const MovieList = ({ navigation, route }) => {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      <View style={{...styles.container, backgroundColor: colors.white}}>
         {isLoading && !isRefresh && !isLoadingMore ? (
           <Spinner />
         ) : isError ? (
@@ -198,17 +199,17 @@ const MovieList = ({ navigation, route }) => {
           <View style={styles.containerList}>
             {results.length > 0 && (
               <View style={styles.containerMainText}>
-                <Text style={styles.textMain} numberOfLines={1}>
+                <Text style={{...styles.textMain, color: colors.darkBlue,}} numberOfLines={1}>
                   {typeRequest === 'discover' ? filter.name : name}
                 </Text>
                 <TouchableOpacity
                   style={[
                     styles.buttonGrid,
-                    numColumns === 2 && styles.buttonGridActive
+                    numColumns === 2 && {backgroundColor: colors.lightGray}
                   ]}
                   onPress={handleGrid}
                 >
-                  <Feather name="grid" size={22} color={darkBlue} />
+                  <Feather name="grid" size={22} color={colors.darkBlue} />
                 </TouchableOpacity>
               </View>
             )}

@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import { ScrollView, View, Text } from 'react-native';
-
+import { useTheme } from '@react-navigation/native';
 import Spinner from '../../common/Spinner';
 import NotificationCard from '../../cards/NotificationCard';
 import { Modal } from '../Modal';
@@ -30,6 +30,7 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [info, setInfo] = useState(INITIAL_INFO);
+  const {colors} = useTheme();
   const {
     name,
     profilePath,
@@ -84,7 +85,7 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
 
   return (
     <Modal ref={ref} style={style} onClose={onClose}>
-      <View style={styles.containerModal}>
+      <View style={{...styles.containerModal, backgroundColor: colors.white}}>
         {isLoading ? (
           <Spinner style={styles.containerCenter} />
         ) : isError ? (
@@ -102,11 +103,11 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
                 style={styles.photo}
               />
               <View style={styles.textItens}>
-                <Text style={styles.titleName}>{name}</Text>
+                <Text style={{...styles.titleName, color: colors.darkBlue}}>{name}</Text>
                 <View style={styles.containerTitleMargin}>
                   <Text
                     numberOfLines={2}
-                    style={[styles.textSmall, styles.textJustify]}
+                    style={[styles.textSmall, styles.textJustify, {color: colors.blue}]}
                   >
                     {knownForDepartment}
                   </Text>
@@ -114,7 +115,7 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
                 <View style={styles.containerTitleMargin}>
                   <Text
                     numberOfLines={2}
-                    style={[styles.textSmall, styles.textJustify]}
+                    style={[styles.textSmall, styles.textJustify, {color: colors.blue}]}
                   >
                     {getAge()}
                   </Text>
@@ -122,19 +123,19 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
                 <View style={styles.containerTitleMargin}>
                   <Text
                     numberOfLines={2}
-                    style={[styles.textSmall, styles.textJustify]}
+                    style={[styles.textSmall, styles.textJustify, {color: colors.blue}]}
                   >
                     {placeOfBirth}
                   </Text>
                 </View>
               </View>
             </View>
-            <Text style={styles.titleInfo}>Biography</Text>
+            <Text style={{...styles.titleInfo, color: colors.darkBlue}}>Biography</Text>
             <Text
               style={[
                 styles.textSmall,
                 styles.textLineHeight,
-                styles.textJustify
+                styles.textJustify, {color: colors.blue}
               ]}
             >
               {biography}

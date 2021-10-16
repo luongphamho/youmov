@@ -3,10 +3,12 @@ import { WebView } from 'react-native-webview';
 import { Modal } from '../Modal';
 import Spinner from '../../common/Spinner';
 import { getResponsiveHeight } from '../../../utils/dimensions';
-
+import { useTheme } from '@react-navigation/native';
 import styles from './styles';
 
-const Loading = () => <Spinner style={styles.container} />;
+const Loading = () => { 
+  const {colors} = useTheme();
+  return(<Spinner style={{...styles.container, backgroundColor: colors.white}} />)};
 
 const VideoModal = forwardRef(({ keyId, onVisible, style }, ref) => {
   const webViewRef = useRef(null);
@@ -15,7 +17,7 @@ const VideoModal = forwardRef(({ keyId, onVisible, style }, ref) => {
   const handleLayout = ({ layout }) => {
     setHeight(layout.height);
   };
-
+  const {colors} = useTheme();
   return (
     <Modal ref={ref} onClose={onVisible} style={style} onLayout={handleLayout}>
       <WebView

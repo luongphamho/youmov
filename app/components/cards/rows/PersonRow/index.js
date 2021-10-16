@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { View, Text } from 'react-native';
-
+import { useTheme } from '@react-navigation/native';
 import { TouchableOpacity } from '../../../common/TouchableOpacity';
 import { Image } from '../../../common/Image';
 
@@ -14,7 +14,9 @@ const uninformed = 'Uninformed';
 const WIDTH = getResponsiveWidth(20);
 
 const PersonRow = memo(
-  ({ type, item, onTeamDetail }) => (
+  ({ type, item, onTeamDetail }) => {
+    const {colors} = useTheme();
+    return (
     <>
       {type === 'character' || type === 'job' ? (
         <TouchableOpacity
@@ -24,7 +26,7 @@ const PersonRow = memo(
           {type === 'character' && (
             <Text
               numberOfLines={1}
-              style={[styles.titleCast, styles.titleCharacter]}
+              style={[styles.titleCast, styles.titleCharacter, {color: colors.blue}]}
             >
               {item.character || uninformed}
             </Text>
@@ -32,7 +34,7 @@ const PersonRow = memo(
           {type === 'job' && (
             <Text
               numberOfLines={1}
-              style={[styles.titleCast, styles.titleCharacter]}
+              style={[styles.titleCast, styles.titleCharacter, {color: colors.blue}]}
             >
               {item.job || uninformed}
             </Text>
@@ -45,7 +47,7 @@ const PersonRow = memo(
             height={WIDTH}
             style={styles.castPhoto}
           />
-          <Text numberOfLines={1} style={styles.titleCast}>
+          <Text numberOfLines={1} style={{...styles.titleCast, color: colors.blue}}>
             {item.name || uninformed}
           </Text>
         </TouchableOpacity>
@@ -59,13 +61,13 @@ const PersonRow = memo(
             height={WIDTH}
             style={styles.productionCompaniesPhoto}
           />
-          <Text numberOfLines={2} style={styles.titleCast}>
+          <Text numberOfLines={2} style={{...styles.titleCast, color: colors.blue}}>
             {item.name || uninformed}
           </Text>
         </View>
       )}
     </>
-  ),
+  )},
   (prevProps, nextProps) => prevProps.item.id === nextProps.item.id
 );
 

@@ -1,53 +1,77 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { useTheme } from '@react-navigation/native';
 import MovieList from '../screens/MovieList';
 import Configuration from '../screens/Configuration';
 import MovieDetails from '../screens/MovieDetails';
 import Search from '../screens/Search';
 import Favorite from '../screens/Favorite';
 
-import { white, darkBlue } from '../utils/colors';
-
 import { ROUTES, TABS } from './routes';
 
-const screenOptions = {
-  headerStyle: {
-    backgroundColor: white
-  },
-  headerTintColor: darkBlue,
-  headerTitleStyle: {
-    fontWeight: 'bold'
-  }
-};
+const screenOptions = {};
 
 const HomeStack = createStackNavigator();
-export const MoviesStackScreen = () => (
-  <HomeStack.Navigator screenOptions={{ ...screenOptions }}>
-    <HomeStack.Screen
-      name={ROUTES.MOVIE_LIST}
-      component={MovieList}
-      options={{
-        title: TABS.HOME
+export const MoviesStackScreen = () => {
+  const { colors } = useTheme();
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.white
+        },
+        headerTintColor: colors.darkBlue,
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        }
       }}
-    />
-    <HomeStack.Screen
-      name={ROUTES.MOVIE_DETAILS}
-      component={MovieDetails}
-      options={({ route }) => {
-        const { title } = route.params || {};
+    >
+      <HomeStack.Screen
+        name={ROUTES.MOVIE_LIST}
+        component={MovieList}
+        options={{
+          title: TABS.HOME
+        }}
+      />
+      <HomeStack.Screen
+        name={ROUTES.MOVIE_DETAILS}
+        component={MovieDetails}
+        options={({ route }) => {
+          const { title } = route.params || {};
 
-        return {
-          title
-        };
-      }}
-    />
-  </HomeStack.Navigator>
-);
+          return {
+            title
+          };
+        }}
+      />
+    </HomeStack.Navigator>
+  );
+};
 
 const SearchStack = createStackNavigator();
-export const SearchStackScreen = () => (
-  <SearchStack.Navigator screenOptions={{ ...screenOptions }}>
+export const SearchStackScreen = () => { 
+  const { colors } = useTheme();
+  // screenOptions = {
+  //   headerStyle: {
+  //     backgroundColor: colors.white
+  //   },
+  //   headerTintColor: colors.darkBlue,
+  //   headerTitleStyle: {
+  //     fontWeight: 'bold'
+  //   }
+  // }
+  return(
+  <SearchStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.white
+      },
+      headerTintColor: colors.darkBlue,
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      }
+    }}
+  >
     <SearchStack.Screen
       name={ROUTES.SEARCH}
       component={Search}
@@ -70,26 +94,68 @@ export const SearchStackScreen = () => (
       }}
     />
   </SearchStack.Navigator>
-);
+)};
 
 const FavoriteStack = createStackNavigator();
-export const FavoriteStackScreen = () => (
-  <FavoriteStack.Navigator screenOptions={{ ...screenOptions }}>
+export const FavoriteStackScreen = () => {
+  const { colors } = useTheme();
+  // screenOptions = {
+  //   headerStyle: {
+  //     backgroundColor: colors.white
+  //   },
+  //   headerTintColor: colors.darkBlue,
+  //   headerTitleStyle: {
+  //     fontWeight: 'bold'
+  //   }
+  // }
+  return(
+  <FavoriteStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.white
+      },
+      headerTintColor: colors.darkBlue,
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      }
+    }}
+  >
     <FavoriteStack.Screen
       name={ROUTES.FAVORITE}
       component={Favorite}
       options={{ title: TABS.FAVORITE }}
     />
   </FavoriteStack.Navigator>
-);
+)};
 
 const ConfigurationStack = createStackNavigator();
-export const ConfigurationStackScreen = () => (
-  <ConfigurationStack.Navigator screenOptions={{ ...screenOptions }}>
+export const ConfigurationStackScreen = () => {
+  const { colors } = useTheme();
+  // screenOptions = {
+  //   headerStyle: {
+  //     backgroundColor: colors.white
+  //   },
+  //   headerTintColor: colors.darkBlue,
+  //   headerTitleStyle: {
+  //     fontWeight: 'bold'
+  //   }
+  // }
+  return (
+  <ConfigurationStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.white
+      },
+      headerTintColor: colors.darkBlue,
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      }
+    }}
+  >
     <ConfigurationStack.Screen
       name={ROUTES.CONFIGURATION}
       component={Configuration}
       options={{ title: TABS.CONFIGURATION }}
     />
   </ConfigurationStack.Navigator>
-);
+)};

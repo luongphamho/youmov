@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { View, Text } from 'react-native';
-
+import { useTheme } from '@react-navigation/native';
 import { TouchableOpacity } from '../../../common/TouchableOpacity';
 import { Image } from '../../../common/Image';
 
@@ -26,27 +26,34 @@ const getLanguage = (value) => {
 };
 
 const renderDivider = (releaseDate, originalLanguage) =>
-  releaseDate && originalLanguage !== 'xx' ? (
-    <Text style={styles.trace}>|</Text>
+{
+  const {colors} = useTheme();
+  return releaseDate && originalLanguage !== 'xx' ? (
+    <Text style={{...styles.trace, color: colors.blue}}>|</Text>
   ) : null;
+}
+
 
 const renderScore = (voteAverage) => {
-  const color =
+  const {colors} = useTheme();
+  const colorRate =
     voteAverage < 5
-      ? 'low'
+      ? {backgroundColor: colors.lightRed}
       : voteAverage >= 5 && voteAverage < 7
-      ? 'mid'
-      : 'high';
+      ? {backgroundColor: colors.lightYellow}
+      : {backgroundColor: colors.lightGreen};
 
   return (
-    <View style={[styles.score, styles[color]]}>
-      <Text style={styles.textPercent}>{voteAverage}</Text>
+    <View style={[styles.score, colorRate]}>
+      <Text style={{...styles.textPercent, color: colors.white}}>{voteAverage}</Text>
     </View>
   );
 };
 
 const MovieRow = memo(
-  ({ numColumns, item, type, isSearch, navigate }) => (
+  ({ numColumns, item, type, isSearch, navigate }) => {
+    const {colors} = useTheme();
+    return(
     <>
       {numColumns === 1 ? (
         <TouchableOpacity
@@ -65,19 +72,19 @@ const MovieRow = memo(
             />
             <View style={styles.item}>
               <View>
-                <Text numberOfLines={2} style={styles.textTitle}>
+                <Text numberOfLines={2} style={{...styles.textTitle, color: colors.darkBlue,}}>
                   {item.title}
                 </Text>
                 <View style={[styles.textRow, styles.containerSubTitle]}>
-                  <Text style={styles.textSmall}>
+                  <Text style={{...styles.textSmall, color: colors.blue}}>
                     {convertToYear(item.release_date)}
                   </Text>
                   {renderDivider(item.release_date, item.original_language)}
-                  <Text numberOfLines={1} style={styles.textSmall}>
+                  <Text numberOfLines={1} style={{...styles.textSmall, color: colors.blue}}>
                     {getLanguage(item.original_language)}
                   </Text>
                 </View>
-                <Text numberOfLines={1} style={styles.textSmall}>
+                <Text numberOfLines={1} style={{...styles.textSmall, color: colors.blue}}>
                   {convertTypeWithGenre(item.genre_ids, type, isSearch)}
                 </Text>
               </View>
@@ -104,13 +111,13 @@ const MovieRow = memo(
               height={HEIGHT}
             />
           </View>
-          <Text numberOfLines={2} style={styles.textTwoTitle}>
+          <Text numberOfLines={2} style={{...styles.textTwoTitle, color: colors.darkBlue}}>
             {item.title}
           </Text>
         </TouchableOpacity>
       )}
     </>
-  ),
+  )},
   (prevProps, nextProps) => prevProps.item.id === nextProps.item.id
 );
 

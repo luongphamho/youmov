@@ -4,11 +4,9 @@ import {
   getResponsiveFontSize,
   getResponsiveHeight
 } from '../../../utils/dimensions';
-import { white, darkBlue, blue } from '../../../utils/colors';
 
 const styles = StyleSheet.create({
   containerModal: {
-    backgroundColor: white,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     height: getResponsiveHeight(70)
@@ -34,13 +32,11 @@ const styles = StyleSheet.create({
   titleInfo: {
     fontSize: getResponsiveFontSize(2.4),
     fontWeight: 'bold',
-    color: darkBlue,
     marginBottom: 7
   },
   titleName: {
     fontSize: getResponsiveFontSize(2.6),
     fontWeight: 'bold',
-    color: darkBlue,
     marginBottom: 10
   },
   textItens: {
@@ -51,7 +47,6 @@ const styles = StyleSheet.create({
   },
   textSmall: {
     fontSize: getResponsiveFontSize(2.1),
-    color: blue
   },
   textJustify: {
     textAlign: 'justify'

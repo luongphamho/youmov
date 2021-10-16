@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 import { getResponsiveFontSize } from '../../utils/dimensions';
 
-import { white, lightGray, darkBlue } from '../../utils/colors';
 
 const styles = StyleSheet.create({
   buttonFilter: {
@@ -11,7 +10,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: white,
     justifyContent: 'center'
   },
   containerList: {
@@ -25,7 +23,6 @@ const styles = StyleSheet.create({
   textMain: {
     fontSize: getResponsiveFontSize(3),
     fontWeight: 'bold',
-    color: darkBlue,
     width: '80%'
   },
   buttonGrid: {
@@ -34,9 +31,6 @@ const styles = StyleSheet.create({
     top: 18,
     padding: 8,
     borderRadius: 100
-  },
-  buttonGridActive: {
-    backgroundColor: lightGray
   },
   bottomModal: {
     justifyContent: 'flex-end',
@@ -53,11 +47,10 @@ const styles = StyleSheet.create({
     width: '50%',
     borderWidth: 1,
     borderRadius: 100,
-    borderColor: lightGray
+    
   },
   loadingText: {
     fontSize: getResponsiveFontSize(2.1),
-    color: darkBlue,
     textAlign: 'center'
   }
 });

@@ -4,11 +4,9 @@ import {
   getResponsiveFontSize,
   getResponsiveHeight
 } from '../../../utils/dimensions';
-import { white, darkBlue } from '../../../utils/colors';
 
 const styles = StyleSheet.create({
   containerModal: {
-    backgroundColor: white,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     height: getResponsiveHeight(70)
@@ -21,7 +19,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: getResponsiveFontSize(2.5),
     fontWeight: 'bold',
-    color: darkBlue,
     padding: 22,
     paddingBottom: 18
   },
@@ -36,13 +33,11 @@ const styles = StyleSheet.create({
   },
   optionSectionTitle: {
     fontSize: getResponsiveFontSize(2.4),
-    color: darkBlue,
     fontWeight: 'bold',
     width: '100%'
   },
   optionTitle: {
     fontSize: getResponsiveFontSize(2.3),
-    color: darkBlue,
     width: '80%'
   },
   containerButton: {
@@ -59,9 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 100
   },
   buttonSave: {
-    backgroundColor: darkBlue,
     borderWidth: 1,
-    borderColor: darkBlue,
     flex: 1
   },
   buttonText: {
@@ -69,7 +62,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   buttonTextSave: {
-    color: white,
     fontWeight: 'bold'
   },
   icon: {

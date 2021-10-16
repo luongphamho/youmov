@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { View, TextInput } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
+import { useTheme } from '@react-navigation/native';
 import { TouchableOpacity } from '../TouchableOpacity';
 
 import { ROUTES } from '../../../navigation/routes';
 
-import { darkGray } from '../../../utils/colors';
 
 import styles from './styles';
 
 const InputSearch = ({ navigate }) => {
   const [search, setSearch] = useState('');
-
+  const {colors} = useTheme();
   const onChangeSearch = value => {
     setSearch(value);
   };
@@ -32,16 +31,16 @@ const InputSearch = ({ navigate }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.containerInput}>
+      <View style={{...styles.containerInput, backgroundColor: colors.freeze}}>
         <View style={styles.inputDirection}>
           <Feather
             style={styles.icon}
             name="search"
             size={20}
-            color={darkGray}
+            color={colors.darkGray}
           />
           <TextInput
-            style={styles.textInput}
+            style={{...styles.textInput, color: colors.darkBlue}}
             onSubmitEditing={handleSubmit}
             onChangeText={value => onChangeSearch(value)}
             value={search}
@@ -52,7 +51,7 @@ const InputSearch = ({ navigate }) => {
             multiline={false}
             autoCorrect={false}
             underlineColorAndroid="transparent"
-            placeholderTextColor={darkGray}
+            placeholderTextColor={colors.darkGray}
             placeholder="Search"
           />
           {search.length > 0 && (
@@ -61,7 +60,7 @@ const InputSearch = ({ navigate }) => {
                 style={styles.icon}
                 name="x"
                 size={20}
-                color={darkGray}
+                color={colors.darkGray}
               />
             </TouchableOpacity>
           )}

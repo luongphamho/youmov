@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 import { getResponsiveFontSize } from '../../../../utils/dimensions';
 
-import { darkBlue } from '../../../../utils/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +16,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: getResponsiveFontSize(2.6),
     fontWeight: 'bold',
-    color: darkBlue,
     marginBottom: 7
   }
 });

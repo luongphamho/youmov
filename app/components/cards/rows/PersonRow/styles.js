@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-import { blue } from '../../../../utils/colors';
 
 const styles = StyleSheet.create({
   containerCast: {
@@ -10,7 +9,6 @@ const styles = StyleSheet.create({
   },
   titleCast: {
     marginTop: 10,
-    color: blue,
     textAlign: 'center'
   },
   titleCharacter: {

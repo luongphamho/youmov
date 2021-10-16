@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-
+import { useTheme } from '@react-navigation/native';
 import styles from './styles';
 
 const SectionRow = ({
@@ -8,7 +8,9 @@ const SectionRow = ({
   isLast = false,
   hasSubTitle = false,
   children = null
-}) => (
+}) => { 
+  const {colors} = useTheme();
+  return(
   <View
     style={[
       !hasSubTitle && styles.container,
@@ -16,9 +18,9 @@ const SectionRow = ({
       hasSubTitle && styles.containerSubTitle
     ]}
   >
-    <Text style={styles.title}>{title}</Text>
+    <Text style={{...styles.title, color: colors.darkBlue}}>{title}</Text>
     {children}
   </View>
-);
+)};
 
 export default SectionRow;

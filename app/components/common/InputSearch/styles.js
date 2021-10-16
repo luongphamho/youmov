@@ -2,8 +2,6 @@ import { StyleSheet } from 'react-native';
 
 import { getResponsiveFontSize } from '../../../utils/dimensions';
 
-import { darkBlue, freeze } from '../../../utils/colors';
-
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -13,7 +11,6 @@ const styles = StyleSheet.create({
   },
   containerInput: {
     height: 40,
-    backgroundColor: freeze,
     borderRadius: 15
   },
   inputDirection: {
@@ -29,7 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     fontSize: getResponsiveFontSize(2.2),
-    color: darkBlue,
     width: '100%'
   }
 });
