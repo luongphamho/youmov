@@ -4,10 +4,11 @@ import { useTheme } from '@react-navigation/native';
 import { Modal } from '../Modal';
 import { TouchableOpacity } from '../../common/TouchableOpacity';
 import { Switch } from '../../common/Switch';
-
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
 
 const Filter = ({ title, type, selected, onChange }) => {
+  const {t} = useTranslation();
   const {colors} = useTheme();
   return(
   <View style={styles.containerRow}>
@@ -34,15 +35,16 @@ const FilterModal = forwardRef(
       setFilters({ type, name });
     };
     const {colors} = useTheme();
+    const {t} = useTranslation();
     return (
       <Modal ref={ref} onClose={onVisible} style={style}>
         <View style={{...styles.containerModal, backgroundColor: colors.white}}>
-          <Text style={{...styles.modalTitle, color: colors.darkBlue}}>Filter</Text>
+          <Text style={{...styles.modalTitle, color: colors.darkBlue}}>{t("filterModal-title")}</Text>
           <ScrollView>
             <View style={styles.containerScroll}>
               <View style={styles.containerSection}>
                 <Text style={{...styles.optionSectionTitle, color: colors.darkBlue}} numberOfLines={2}>
-                  Date
+                  {t("filterModal-date")}
                 </Text>
                 <Filter
                   title="Releases"
@@ -59,7 +61,7 @@ const FilterModal = forwardRef(
               </View>
               <View style={styles.containerSection}>
                 <Text style={{...styles.optionSectionTitle, color: colors.darkBlue}} numberOfLines={2}>
-                  Popularity
+                  {t("filterModal-optionTitle-populary")}
                 </Text>
                 <Filter
                   title="Most popular"
@@ -76,7 +78,7 @@ const FilterModal = forwardRef(
               </View>
               <View>
                 <Text style={{...styles.optionSectionTitle, color: colors.darkBlue}} numberOfLines={2}>
-                  Revenue
+                  {t("filterModal-optionTitle-revenue")}
                 </Text>
                 <Filter
                   title="Higher revenue"
@@ -99,7 +101,7 @@ const FilterModal = forwardRef(
               onPress={() => onFilter(filters)}
             >
               <Text style={[styles.buttonText, styles.buttonTextSave, {color: colors.white}]}>
-                Confirm
+                {t("filterModal-optionTitle-btnText")}
               </Text>
             </TouchableOpacity>
           </View>

@@ -6,10 +6,11 @@ import { TouchableOpacity } from '../TouchableOpacity';
 
 import { ROUTES } from '../../../navigation/routes';
 
-
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
 
 const InputSearch = ({ navigate }) => {
+  const {t} = useTranslation();
   const [search, setSearch] = useState('');
   const {colors} = useTheme();
   const onChangeSearch = value => {
@@ -52,7 +53,7 @@ const InputSearch = ({ navigate }) => {
             autoCorrect={false}
             underlineColorAndroid="transparent"
             placeholderTextColor={colors.darkGray}
-            placeholder="Search"
+            placeholder= {t("inputSearch-search")}
           />
           {search.length > 0 && (
             <TouchableOpacity onPress={handleClearSearch}>

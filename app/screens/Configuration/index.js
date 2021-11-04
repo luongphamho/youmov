@@ -3,66 +3,82 @@ import { ScrollView, View, Text } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
-import {ThemeContext} from '../../components/context/ThemeContext'
-
+import { ThemeContext } from '../../components/context/ThemeContext';
 import { Alert } from '../../components/common/Alert';
 import { Share } from '../../components/common/Share';
 import Screen from '../../components/common/Screen';
 import { TouchableOpacity } from '../../components/common/TouchableOpacity';
 import { Switch } from '../../components/common/Switch';
-
-import { getItem, setItem } from '../../utils/asyncStorage';
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import styles from './styles';
 
 const Configuration = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
-  const {colors} = useTheme()
+  const { colors } = useTheme();
   const [hasAdultContent, setHasAdultContent] = useState(false);
-  const {handleChangeTheme} = useContext(ThemeContext);
-  // console.log(i)
-  const showError = () => {
-    Alert({
-      title: 'Attention',
-      description: 'Something wrong has happened, please try again later.'
-    });
+  const [toggleLanguage, setToggleLanguage] = useState(false);
+  const { handleChangeTheme } = useContext(ThemeContext);
+  const handleLanguage = async (value) => {
+    setToggleLanguage(value);
+    if (value === true) {
+      await AsyncStorage.setItem('@LanguageKey', 'vi');
+      i18n.changeLanguage('vi');
+    }
+    if (value === false) {
+      await AsyncStorage.setItem('@LanguageKey', 'en');
+      i18n.changeLanguage('en');
+    }
   };
 
   const handleChangeAdultContent = async (value) => {
     try {
       setHasAdultContent(value);
-      await setItem('@ConfigKey', `{"hasAdultContent": ${value}}`);
+      await AsyncStorage.setItem('@hasAdultContent', JSON.stringify(value));
     } catch (error) {
       showError();
     }
   };
+
+  const showError = () => {
+    Alert({
+      title: 'Attention',
+      description: t('notificationCard-error')
+    });
+  };
+
   const handleShare = () => {
     Share({
-      message: 'Learn all about movies and series \u{1F37F}',
+      message: `${t('setting-shareMessage')} \u{1F37F}`,
       url: 'https://www.themoviedb.org/',
       title: 'AmoCinema',
-      dialogTitle: 'Learn all about movies and series \u{1F37F}'
+      dialogTitle: `${t('setting-shareMessage')} \u{1F37F}`
     });
   };
 
   const handleRating = () => {
     Alert({
       title: 'Attention',
-      description:
-        'Nothing happens now. In the future you will be redirected to store.'
+      description: t('setting-rate')
     });
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const adultContentStorage = await getItem(
-          '@ConfigKey',
-          'hasAdultContent'
-        );
-
-        setHasAdultContent(adultContentStorage);
+        const Storage = await AsyncStorage.multiGet([
+          '@hasAdultContent',
+          '@LanguageKey'
+        ]);
+        if (Storage[1][1] === 'vi') {
+          setToggleLanguage(true);
+        }
+        if (Storage[1][1] === 'en') {
+          setToggleLanguage(false);
+        }
+        setHasAdultContent(JSON.parse(Storage[0][1]));
       } catch (error) {
         showError();
       }
@@ -71,18 +87,34 @@ const Configuration = () => {
 
   return (
     <Screen>
-      <ScrollView style={{backgroundColor: colors.white}}>
-        <View style={{...styles.container, backgroundColor: colors.white}}>
+      <ScrollView style={{ backgroundColor: colors.white }}>
+        <View style={{ ...styles.container, backgroundColor: colors.white }}>
           <View style={styles.section}>
             <Text
-              style={[styles.itemText, styles.sectionText, {color: colors.darkBlue}]}
+              style={[
+                styles.itemText,
+                styles.sectionText,
+                { color: colors.darkBlue }
+              ]}
               numberOfLines={2}
             >
-              Interface
+              {t('setting-interface')}
             </Text>
-            <View style={[styles.item, styles.itemNoBorder, {backgroundColor: colors.white, borderBottomColor: colors.lightGray}]}>
-              <Text style={{...styles.itemText, color: colors.darkBlue}} numberOfLines={2}>
-                Include adult content
+            <View
+              style={[
+                styles.item,
+                styles.itemNoBorder,
+                {
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }
+              ]}
+            >
+              <Text
+                style={{ ...styles.itemText, color: colors.darkBlue }}
+                numberOfLines={2}
+              >
+                {t('setting-adult')}
               </Text>
               <Switch
                 accessibilityLabel="Include adult content"
@@ -90,19 +122,43 @@ const Configuration = () => {
                 onValueChange={handleChangeAdultContent}
               />
             </View>
-            <View style={[styles.item, styles.itemNoBorder, {backgroundColor: colors.white, borderBottomColor: colors.lightGray}]}>
-              <Text style={{...styles.itemText, color: colors.darkBlue}} numberOfLines={2}>
-                Vietnamese
+            <View
+              style={[
+                styles.item,
+                styles.itemNoBorder,
+                {
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }
+              ]}
+            >
+              <Text
+                style={{ ...styles.itemText, color: colors.darkBlue }}
+                numberOfLines={2}
+              >
+                {t('setting-vietnamese')}
               </Text>
               <Switch
-                accessibilityLabel="Include adult content"
-                value={hasAdultContent}
-                onValueChange={handleChangeAdultContent}
+                accessibilityLabel="Vietnamese"
+                value={toggleLanguage}
+                onValueChange={handleLanguage}
               />
             </View>
-            <View style={[styles.item, styles.itemNoBorder, {backgroundColor: colors.white, borderBottomColor: colors.lightGray}]}>
-              <Text style={{...styles.itemText, color: colors.darkBlue}} numberOfLines={2}>
-                Dark Mode
+            <View
+              style={[
+                styles.item,
+                styles.itemNoBorder,
+                {
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }
+              ]}
+            >
+              <Text
+                style={{ ...styles.itemText, color: colors.darkBlue }}
+                numberOfLines={2}
+              >
+                {t('setting-darkMode')}
               </Text>
               <Switch
                 accessibilityLabel="Dark Mode"
@@ -113,15 +169,28 @@ const Configuration = () => {
           </View>
           <View>
             <Text
-              style={[styles.itemText, styles.sectionText, {color: colors.darkBlue}]}
+              style={[
+                styles.itemText,
+                styles.sectionText,
+                { color: colors.darkBlue }
+              ]}
               numberOfLines={2}
             >
-              Application
+              {t('setting-app')}
             </Text>
             <TouchableOpacity onPress={handleShare}>
-              <View style={{...styles.item, backgroundColor: colors.white, borderBottomColor: colors.lightGray}}>
-                <Text style={{...styles.itemText, color: colors.darkBlue}} numberOfLines={2}>
-                  Tell a friend
+              <View
+                style={{
+                  ...styles.item,
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }}
+              >
+                <Text
+                  style={{ ...styles.itemText, color: colors.darkBlue }}
+                  numberOfLines={2}
+                >
+                  {t('setting-share')}
                 </Text>
                 <Feather
                   name="share"
@@ -132,9 +201,18 @@ const Configuration = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleRating}>
-              <View style={{...styles.item, backgroundColor: colors.white, borderBottomColor: colors.lightGray}}>
-                <Text style={{...styles.itemText, color: colors.darkBlue}} numberOfLines={2}>
-                  Rate the app
+              <View
+                style={{
+                  ...styles.item,
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }}
+              >
+                <Text
+                  style={{ ...styles.itemText, color: colors.darkBlue }}
+                  numberOfLines={2}
+                >
+                  {t('setting-rate')}
                 </Text>
                 <Feather
                   name="star"
@@ -144,9 +222,21 @@ const Configuration = () => {
                 />
               </View>
             </TouchableOpacity>
-            <View style={[styles.item, styles.itemNoBorder, {backgroundColor: colors.white, borderBottomColor: colors.lightGray}]}>
-              <Text style={{...styles.itemTextVersion, color: colors.blue}} numberOfLines={2}>
-                Version {Constants.manifest.version}
+            <View
+              style={[
+                styles.item,
+                styles.itemNoBorder,
+                {
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }
+              ]}
+            >
+              <Text
+                style={{ ...styles.itemTextVersion, color: colors.blue }}
+                numberOfLines={2}
+              >
+                {t('setting-version')} {Constants.manifest.version}
               </Text>
             </View>
           </View>

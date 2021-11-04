@@ -6,16 +6,17 @@ import { TouchableOpacity } from '../../common/TouchableOpacity';
 
 import { getResponsiveWidth } from '../../../utils/dimensions';
 import styles from './styles';
-
+import { useTranslation } from 'react-i18next';
 const WIDTH = getResponsiveWidth(20);
 
 const NotificationCard = ({
   style = styles.containerError,
   icon = 'alert-octagon',
-  textError = 'Something wrong has happened, please try again later.',
-  textButton = 'Load',
   onPress = null
 }) => { 
+  const {t} = useTranslation();
+  const textError = t("notificationCard-error")
+  const textButton = t("notificationCard-textBtn")
   const { colors } = useTheme();
   return(
   <View style={{...style, backgroundColor: colors.white}}>

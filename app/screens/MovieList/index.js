@@ -3,7 +3,6 @@ import { View, Text } from 'react-native';
 import { Asset } from 'expo-asset';
 import { Feather } from '@expo/vector-icons';
 import { Assets as StackAssets } from '@react-navigation/stack';
-
 import Screen from '../../components/common/Screen';
 import Spinner from '../../components/common/Spinner';
 import NotificationCard from '../../components/cards/NotificationCard';
@@ -14,26 +13,25 @@ import { TouchableOpacity } from '../../components/common/TouchableOpacity';
 
 import request from '../../services/api';
 
-import { getItem } from '../../utils/asyncStorage';
 import { getTodayDate } from '../../utils/dates';
-
 import { useTheme } from '@react-navigation/native';
-
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
 
 const MovieList = ({ navigation, route }) => {
+  const {t} = useTranslation();
   const {colors} = useTheme()
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [hasAdultContent, setHasAdultContent] = useState(false);
+
   const [results, setResults] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [filter, setFilter] = useState({
     type: 'popularity.desc',
-    name: 'Most popular'
+    name: t("movieList-filterPopular")
   });
   const [view, setView] = useState({ numColumns: 1, keyGrid: 1 });
   const filterModalRef = useRef(null);
@@ -66,10 +64,8 @@ const MovieList = ({ navigation, route }) => {
         'release_date.lte': dateRelease,
         sort_by: type,
         with_release_type: '1|2|3|4|5|6|7',
-        include_adult: hasAdultContent,
         ...getQueryRequest()
       });
-
       setIsLoading(false);
       setIsLoadingMore(false);
       setIsRefresh(false);
@@ -138,7 +134,7 @@ const MovieList = ({ navigation, route }) => {
             style={{...styles.loadingButton, borderColor: colors.lightGray}}
             onPress={handleLoadMore}
           >
-            <Text style={{...styles.loadingText, color: colors.darkBlue,}}>Load more</Text>
+            <Text style={{...styles.loadingText, color: colors.darkBlue,}}>{t("movieList-loadMore")}</Text>
           </TouchableOpacity>
         </View>
       );
@@ -166,13 +162,6 @@ const MovieList = ({ navigation, route }) => {
     (async () => {
       try {
         Asset.loadAsync(StackAssets);
-
-        const adultContentStorage = await getItem(
-          '@ConfigKey',
-          'hasAdultContent'
-        );
-
-        setHasAdultContent(adultContentStorage);
         requestMoviesList();
       } catch (error) {
         requestMoviesList();
@@ -193,7 +182,7 @@ const MovieList = ({ navigation, route }) => {
         ) : results.length === 0 ? (
           <NotificationCard
             icon="thumbs-down"
-            textError="No results available."
+            textError= {t("movieList-textError")}
           />
         ) : (
           <View style={styles.containerList}>

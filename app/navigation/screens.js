@@ -6,14 +6,21 @@ import Configuration from '../screens/Configuration';
 import MovieDetails from '../screens/MovieDetails';
 import Search from '../screens/Search';
 import Favorite from '../screens/Favorite';
-
-import { ROUTES, TABS } from './routes';
+import { useTranslation } from 'react-i18next';
+import { ROUTES } from './routes';
 
 const screenOptions = {};
 
 const HomeStack = createStackNavigator();
 export const MoviesStackScreen = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const TABS = {
+    HOME: t("TAB-HOME"),
+    SEARCH: t("TAB-SEARCH"),
+    FAVORITE: t("TAB-FAVORITE"),
+    CONFIGURATION: t("TAB-CONFIGURATION")
+  };
   return (
     <HomeStack.Navigator
       screenOptions={{
@@ -51,6 +58,13 @@ export const MoviesStackScreen = () => {
 const SearchStack = createStackNavigator();
 export const SearchStackScreen = () => { 
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const TABS = {
+    HOME: t("TAB-HOME"),
+    SEARCH: t("TAB-SEARCH"),
+    FAVORITE: t("TAB-FAVORITE"),
+    CONFIGURATION: t("TAB-CONFIGURATION")
+  };
   // screenOptions = {
   //   headerStyle: {
   //     backgroundColor: colors.white
@@ -99,6 +113,13 @@ export const SearchStackScreen = () => {
 const FavoriteStack = createStackNavigator();
 export const FavoriteStackScreen = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const TABS = {
+    HOME: t("TAB-HOME"),
+    SEARCH: t("TAB-SEARCH"),
+    FAVORITE: t("TAB-FAVORITE"),
+    CONFIGURATION: t("TAB-CONFIGURATION")
+  };
   // screenOptions = {
   //   headerStyle: {
   //     backgroundColor: colors.white
@@ -131,6 +152,13 @@ export const FavoriteStackScreen = () => {
 const ConfigurationStack = createStackNavigator();
 export const ConfigurationStackScreen = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const TABS = {
+    HOME: t("TAB-HOME"),
+    SEARCH: t("TAB-SEARCH"),
+    FAVORITE: t("TAB-FAVORITE"),
+    CONFIGURATION: t("TAB-CONFIGURATION")
+  };
   // screenOptions = {
   //   headerStyle: {
   //     backgroundColor: colors.white

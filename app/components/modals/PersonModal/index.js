@@ -5,7 +5,7 @@ import Spinner from '../../common/Spinner';
 import NotificationCard from '../../cards/NotificationCard';
 import { Modal } from '../Modal';
 import { Image } from '../../common/Image';
-
+import { useTranslation } from 'react-i18next';
 import request from '../../../services/api';
 
 import { getResponsiveWidth } from '../../../utils/dimensions';
@@ -13,20 +13,23 @@ import { getImageApi } from '../../../utils/images';
 
 import styles from './styles';
 
-const UNINFORMED = 'Uninformed';
-const INITIAL_INFO = {
-  profilePath: '',
-  name: `${UNINFORMED} name`,
-  knownForDepartment: `${UNINFORMED} department`,
-  birthday: '',
-  placeOfBirth: `${UNINFORMED} place of birth`,
-  biography: UNINFORMED
-};
+
 
 const WIDTH = getResponsiveWidth(30);
 const HEIGHT = getResponsiveWidth(40);
 
 const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
+  const {t} = useTranslation();
+  const UNINFORMED = t("personModal-uninformed");
+const INITIAL_INFO = {
+  profilePath: '',
+  name: `${UNINFORMED} ${t("personModal-name")}`,
+  knownForDepartment: `${UNINFORMED} ${t("personModal-department")}`,
+  birthday: '',
+  placeOfBirth: `${UNINFORMED} ${"personModal-birth"}`,
+  biography: UNINFORMED
+};
+  
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [info, setInfo] = useState(INITIAL_INFO);
@@ -48,10 +51,10 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
       let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age -= 1;
-      return `${age} years`;
+      return `${age} ${t("personModal-years")}`;
     }
 
-    return `${UNINFORMED} age`;
+    return `${UNINFORMED} ${t("personModal-age")}`;
   };
 
   const requestTeamInfo = async () => {
@@ -130,7 +133,7 @@ const PersonModal = forwardRef(({ creditId, style, onClose }, ref) => {
                 </View>
               </View>
             </View>
-            <Text style={{...styles.titleInfo, color: colors.darkBlue}}>Biography</Text>
+            <Text style={{...styles.titleInfo, color: colors.darkBlue}}>{t("personModal-infoTitle")}</Text>
             <Text
               style={[
                 styles.textSmall,

@@ -30,7 +30,7 @@ import isoLanguage from '../../data/iso.json';
 
 
 import { useTheme } from '@react-navigation/native';
-
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
 
 const UNINFORMED = 'Uninformed';
@@ -69,6 +69,7 @@ const renderReadMoreFooter = (text, handlePress) => {
 )};
 
 const MovieDetails = ({ navigation, route }) => {
+  const {t} = useTranslation();
   const {colors} = useTheme()
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -118,7 +119,7 @@ const MovieDetails = ({ navigation, route }) => {
     if (isError) {
       Alert({
         title: 'Attention',
-        description: 'Something wrong has happened, please try again later.'
+        description: t("notificationCard-error")
       });
     } else {
       Share({
@@ -135,11 +136,12 @@ const MovieDetails = ({ navigation, route }) => {
       setIsLoading(true);
 
       const { id } = route.params;
+      console.log(id)
       const data = await request(`movie/${id}`, {
         include_image_language: 'en,null',
         append_to_response: 'credits,videos,images'
       });
-
+      // console.log(data)
       setIsLoading(false);
       setIsError(false);
       setInfo({
@@ -167,7 +169,7 @@ const MovieDetails = ({ navigation, route }) => {
 
   const renderListEmpty = (colors) => (
     <View>
-      <Text style={{...styles.subTitleInfo, color: colors.blue,}}>Uninformed</Text>
+      <Text style={{...styles.subTitleInfo, color: colors.blue,}}>{t("personModal-uninformed")}</Text>
     </View>
   );
 
@@ -229,16 +231,16 @@ const MovieDetails = ({ navigation, route }) => {
                   <ReadMore
                     numberOfLines={3}
                     renderTruncatedFooter={(handlePress) =>
-                      renderReadMoreFooter('Read more', handlePress)
+                      renderReadMoreFooter(t("movieDetails-readMore"), handlePress)
                     }
                     renderRevealedFooter={(handlePress) =>
-                      renderReadMoreFooter('Read less', handlePress)
+                      renderReadMoreFooter(t("movieDetails-readLess"), handlePress)
                     }
                   >
                     <Text style={{...styles.subTitleInfo, color: colors.blue,}}>{overview}</Text>
                   </ReadMore>
                 </SectionRow>
-                <SectionRow title="Main cast">
+                <SectionRow title={t("movieDetails-mainCast")}>
                   <PersonListRow
                     data={cast}
                     type="character"
@@ -248,7 +250,7 @@ const MovieDetails = ({ navigation, route }) => {
                     renderItem={renderItem}
                   />
                 </SectionRow>
-                <SectionRow title="Main technical team">
+                <SectionRow title={t("movieDetails-mainTech")}>
                   <PersonListRow
                     data={crew}
                     type="job"
@@ -258,7 +260,7 @@ const MovieDetails = ({ navigation, route }) => {
                     renderItem={renderItem}
                   />
                 </SectionRow>
-                <SectionRow title="Producer" isLast>
+                <SectionRow title={t("movieDetails-producer")} isLast>
                   <PersonListRow
                     data={productionCompanies}
                     type="production"
