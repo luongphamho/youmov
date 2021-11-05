@@ -1,3 +1,7 @@
-import App from './app/navigation';
+import React from 'react';
 
-export default App;
+import Routes from './app/navigation/index';
+
+export default function App() {
+  return <Routes></Routes>
+}

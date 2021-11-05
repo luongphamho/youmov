@@ -19,6 +19,7 @@
     "expo-asset": "^8.3.3",
     "expo-constants": "^11.0.1",
     "expo-status-bar": "~1.0.4",
+    "firebase": "8.2.3",
     "i18next": "^21.3.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
