@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, InputField, ErrorMessage } from '../../components/auth/index';
 import Firebase from '../../config/firebase';
 
@@ -28,7 +28,9 @@ export default function LoginScreen({ navigation }) {
   const onLogin = async () => {
     try {
       if (email !== '' && password !== '') {
+        await AsyncStorage.setItem('@user', email);
         await auth.signInWithEmailAndPassword(email, password);
+        
       }
     } catch (error) {
       setLoginError(error.message);

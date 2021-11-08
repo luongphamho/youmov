@@ -28,6 +28,7 @@ const translationsVn = {
   "setting-version" : "Phiên bản",
   "setting-shareMessage" : "Xem nhiều phim hơn tại",
   "setting-rate" : "Bạn sẽ được chuyển hướng đến cửa hàng",
+  "setting-signout": "Đăng xuất",
   "movieDetails-readMore" : "Xem thêm ",
   "movieDetails-readLess" : "Rút gọn",
   "movieDetails-mainCast" : "Diễn viên",

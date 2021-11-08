@@ -64,12 +64,12 @@ export default function RootNavigator() {
   }
   const theme = isDarkMode ? CustomDarkTheme : CustromDefaultTheme;
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
       <ThemeContext.Provider value={themeContext}>
         <NavigationContainer theme={theme}>
           <Host>{user ? <NavigationStack /> : <AuthStack />}</Host>
         </NavigationContainer>
       </ThemeContext.Provider>
-    </Provider>
+    // </Provider>
   );
 }

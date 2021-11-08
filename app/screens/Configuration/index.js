@@ -13,9 +13,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import styles from './styles';
-
+import Firebase from '../../config/firebase';
+import { IconButton } from '../../components/auth/';
+import { AuthenticatedUserContext } from '../../components/context/AuthenticatedUserProvider';
+const auth = Firebase.auth();
 const Configuration = () => {
   const { t } = useTranslation();
+  const { user } = useContext(AuthenticatedUserContext);
+  console.log(user);
   const theme = useTheme();
   const { colors } = useTheme();
   const [hasAdultContent, setHasAdultContent] = useState(false);
@@ -64,7 +69,14 @@ const Configuration = () => {
       description: t('setting-rate')
     });
   };
-
+  const handleSignOut = async () => {
+    try {
+      await AsyncStorage.removeItem('@user');
+      await auth.signOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     (async () => {
       try {
@@ -222,6 +234,28 @@ const Configuration = () => {
                 />
               </View>
             </TouchableOpacity>
+            <TouchableOpacity onPress={handleSignOut}>
+              <View
+                style={{
+                  ...styles.item,
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }}
+              >
+                <Text
+                  style={{ ...styles.itemText, color: colors.darkBlue }}
+                  numberOfLines={2}
+                >
+                  {t('setting-signout')}
+                </Text>
+                <IconButton
+                  name="logout"
+                  size={22}
+                  color={colors.darkBlue}
+                  style={styles.icon}
+                />
+              </View>
+            </TouchableOpacity>
             <View
               style={[
                 styles.item,
@@ -240,6 +274,7 @@ const Configuration = () => {
               </Text>
             </View>
           </View>
+
         </View>
       </ScrollView>
     </Screen>
