@@ -6,6 +6,10 @@ import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
 import { Button, InputField, ErrorMessage } from '../../components/auth/index';
 import Firebase from '../../config/firebase';
 
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
+const firestore = firebase.firestore();
 const auth = Firebase.auth();
 
 export default function SignupScreen({ navigation }) {
@@ -14,7 +18,7 @@ export default function SignupScreen({ navigation }) {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [rightIcon, setRightIcon] = useState('eye');
   const [signupError, setSignupError] = useState('');
-
+  // console.log(firestore)
   const handlePasswordVisibility = () => {
     if (rightIcon === 'eye') {
       setRightIcon('eye-off');
@@ -28,7 +32,22 @@ export default function SignupScreen({ navigation }) {
   const onHandleSignup = async () => {
     try {
       if (email !== '' && password !== '') {
-        await auth.createUserWithEmailAndPassword(email, password);
+        await auth
+          .createUserWithEmailAndPassword(email, password)
+          .then((cred) => {
+            return firestore
+              .collection('users')
+              .doc(cred.user.uid)
+              .set({
+                email: email,
+                password: password,
+                favorite: [],
+                history: []
+              })
+              .then(() => {
+                console.log('object');
+              });
+          });
       }
     } catch (error) {
       setSignupError(error.message);
@@ -37,7 +56,7 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar style='dark-content' />
+      <StatusBar style="dark-content" />
       <Text style={styles.title}>Create new account</Text>
       <InputField
         inputStyle={{
@@ -47,14 +66,14 @@ export default function SignupScreen({ navigation }) {
           backgroundColor: '#fff',
           marginBottom: 20
         }}
-        leftIcon='email'
-        placeholder='Enter email'
-        autoCapitalize='none'
-        keyboardType='email-address'
-        textContentType='emailAddress'
+        leftIcon="email"
+        placeholder="Enter email"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        textContentType="emailAddress"
         autoFocus={true}
         value={email}
-        onChangeText={text => setEmail(text)}
+        onChangeText={(text) => setEmail(text)}
       />
       <InputField
         inputStyle={{
@@ -64,23 +83,23 @@ export default function SignupScreen({ navigation }) {
           backgroundColor: '#fff',
           marginBottom: 20
         }}
-        leftIcon='lock'
-        placeholder='Enter password'
-        autoCapitalize='none'
+        leftIcon="lock"
+        placeholder="Enter password"
+        autoCapitalize="none"
         autoCorrect={false}
         secureTextEntry={passwordVisibility}
-        textContentType='password'
+        textContentType="password"
         rightIcon={rightIcon}
         value={password}
-        onChangeText={text => setPassword(text)}
+        onChangeText={(text) => setPassword(text)}
         handlePasswordVisibility={handlePasswordVisibility}
       />
       {signupError ? <ErrorMessage error={signupError} visible={true} /> : null}
       <Button
         onPress={onHandleSignup}
-        backgroundColor='#f57c00'
-        title='Signup'
-        tileColor='#fff'
+        backgroundColor="#f57c00"
+        title="Signup"
+        tileColor="#fff"
         titleSize={20}
         containerStyle={{
           marginBottom: 24
@@ -88,8 +107,8 @@ export default function SignupScreen({ navigation }) {
       />
       <RNButton
         onPress={() => navigation.navigate('Login')}
-        title='Go to Login'
-        color='#fff'
+        title="Go to Login"
+        color="#fff"
       />
     </View>
   );
