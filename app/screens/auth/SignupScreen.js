@@ -9,8 +9,7 @@ import Firebase from '../../config/firebase';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-const firestore = firebase.firestore();
-const auth = Firebase.auth();
+
 
 export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -32,24 +31,19 @@ export default function SignupScreen({ navigation }) {
   const onHandleSignup = async () => {
     try {
       if (email !== '' && password !== '') {
-        await auth
-          .createUserWithEmailAndPassword(email, password)
-          .then((cred) => {
-            return firestore
-              .collection('users')
-              .doc(cred.user.uid)
-              .set({
-                email: email,
-                password: password,
-                favorite: [],
-                history: []
-              })
-              .then(() => {
-                console.log('object');
-              });
-          });
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const currentUser = firebase.auth().currentUser;  
+        const db = firebase.firestore();
+        db.collection("users")
+          .doc(currentUser.uid)
+          .set({
+            email: currentUser.email,
+            listHis: [],
+            listFav: [],
+
+        });
       }
-    } catch (error) {
+        } catch (error) {
       setSignupError(error.message);
     }
   };

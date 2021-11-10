@@ -57,7 +57,7 @@ const AppNavigator = () => {
 
   const Tab = createBottomTabNavigator();
   const TabsConfig = {
-    tabBarOptions: {
+    screenOptions: {
       activeTintColor: themeColor.colors.pink,
       inactiveTintColor: themeColor.colors.blue,
       labelStyle: {
