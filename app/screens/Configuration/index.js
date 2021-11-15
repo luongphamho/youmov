@@ -79,7 +79,7 @@ const Configuration = () => {
   const handleSignOut = async () => {
     try {
       await AsyncStorage.removeItem('@user');
-      await auth.signOut();
+      await firebase.auth().signOut();
     } catch (error) {
       console.log(error);
     }
