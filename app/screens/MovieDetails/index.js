@@ -28,10 +28,12 @@ import { sliceArrayLength } from '../../utils/array';
 
 import isoLanguage from '../../data/iso.json';
 
-
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import styles from './styles';
+
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 const UNINFORMED = 'Uninformed';
 const INITIAL_INFO = {
@@ -60,23 +62,28 @@ const ADULT_RATE = {
   false: 'Yes'
 };
 
-const renderReadMoreFooter = (text, handlePress) => { 
+const renderReadMoreFooter = (text, handlePress) => {
   // const {colors} = useTheme()
-  return(
-  <TouchableOpacity onPress={handlePress}>
-    <Text style={{...styles.readMore, color: "#f95f62"}}>{text}</Text>
-  </TouchableOpacity>
-)};
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <Text style={{ ...styles.readMore, color: '#f95f62' }}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const MovieDetails = ({ navigation, route }) => {
-  const {t} = useTranslation();
-  const {colors} = useTheme()
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const [creditId, setCreditId] = useState(null);
   const [info, setInfo] = useState(INITIAL_INFO);
   const personModalRef = useRef(null);
+  const [favoriteList, setFavoriteList] = useState([]);
+  const [historyList, setHistoryList] = useState([]);
+  const user = firebase.auth().currentUser;
+  const db = firebase.firestore();
 
   const getInfosDetail = ({
     runtime = 0,
@@ -119,7 +126,7 @@ const MovieDetails = ({ navigation, route }) => {
     if (isError) {
       Alert({
         title: 'Attention',
-        description: t("notificationCard-error")
+        description: t('notificationCard-error')
       });
     } else {
       Share({
@@ -136,7 +143,7 @@ const MovieDetails = ({ navigation, route }) => {
       setIsLoading(true);
 
       const { id } = route.params;
-      console.log(id)
+      // console.log(id)
       const data = await request(`movie/${id}`, {
         include_image_language: 'en,null',
         append_to_response: 'credits,videos,images'
@@ -169,10 +176,64 @@ const MovieDetails = ({ navigation, route }) => {
 
   const renderListEmpty = (colors) => (
     <View>
-      <Text style={{...styles.subTitleInfo, color: colors.blue,}}>{t("personModal-uninformed")}</Text>
+      <Text style={{ ...styles.subTitleInfo, color: colors.blue }}>
+        {t('personModal-uninformed')}
+      </Text>
     </View>
   );
+  // Hàm thêm favor
+  const handdleAdd = (filmId) => {
+    // console.log("Add favor", filmId)
+    let favorite = favoriteList;
+    favorite.push(filmId);
+    db.collection('users').doc(user.uid).update({
+      listFav: favorite
+    });
+  };
+  // Hàm xóa favor
+  const handdleRemove = (filmId) => {
+    // console.log("Remove favor")
+    let favorite = favoriteList;
+    const index = favorite.indexOf(filmId);
+    favorite.splice(index, 1);
+    db.collection('users').doc(user.uid).update({
+      listFav: favorite
+    });
+  };
+  // Hàm thêm xóa history
+  const handleHistory = (filmId) => {
+    // Thêm max 3 item vào array history [0, 1, 2]
+    // Khi truy xuất, sẽ truy suất ngược lại [2, 1 ,0].
+    // Khi thêm đủ 3, sẽ xóa item cũ đi. // thêm 3 vào 3 -> [0, 1, 2] => [1, 2, 3]
+    // Khi thêm item đã có array history, sẽ đẩy item đó vào cuối mảng [1, 2 ,3] => [2, 3, 1]
 
+    let history = historyList;
+    const index = history.indexOf(filmId);
+    // index < 0 => phim chưa có trong lịch sử
+    if (index < 0) {
+      if (history.length < 3) {
+        history.push(filmId);
+        return db.collection('users').doc(user.uid).update({
+          "listHis": history
+        });
+      }
+      if (history.length === 3) {
+        history.shift();
+        history.push(filmId);
+        return db.collection('users').doc(user.uid).update({
+          "listHis": history
+        });
+      }
+    }
+    // Index > 0 => Phim đã có trong lịch sử
+    else if (index >= 0) {
+      history.splice(index, 1);
+      history.push(filmId);
+      return db.collection('users').doc(user.uid).update({
+        "listHis": history
+      });
+    }
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -187,11 +248,20 @@ const MovieDetails = ({ navigation, route }) => {
   }, [navigation]);
 
   useEffect(() => {
+    const unsubscribe = db.collection('users')
+      .doc(user.uid)
+      .onSnapshot((query) => {
+        const { listHis, listFav } = query.data();
+        setFavoriteList(listFav);
+        setHistoryList(listHis);
+      });
     requestMoviesInfo();
+    return ()=>unsubscribe()
   }, []);
 
   {
     const {
+      id,
       backdropPath,
       voteAverage,
       video,
@@ -206,7 +276,7 @@ const MovieDetails = ({ navigation, route }) => {
 
     return (
       <Screen>
-        <View style={{...styles.container, backgroundColor: colors.white}}>
+        <View style={{ ...styles.container, backgroundColor: colors.white }}>
           {isLoading ? (
             <Spinner />
           ) : isError ? (
@@ -224,6 +294,11 @@ const MovieDetails = ({ navigation, route }) => {
                 video={video}
                 showImage={showImage}
                 onPress={handleImage}
+                handdleAdd={handdleAdd}
+                handdleRemove={handdleRemove}
+                handleHistory={handleHistory}
+                isAdd={favoriteList.indexOf(id) < 0 ? true : false}
+                filmId={id}
               />
               <View style={styles.containerMovieInfo}>
                 <MainInfoRow data={infosDetail} />
@@ -231,16 +306,26 @@ const MovieDetails = ({ navigation, route }) => {
                   <ReadMore
                     numberOfLines={3}
                     renderTruncatedFooter={(handlePress) =>
-                      renderReadMoreFooter(t("movieDetails-readMore"), handlePress)
+                      renderReadMoreFooter(
+                        t('movieDetails-readMore'),
+                        handlePress
+                      )
                     }
                     renderRevealedFooter={(handlePress) =>
-                      renderReadMoreFooter(t("movieDetails-readLess"), handlePress)
+                      renderReadMoreFooter(
+                        t('movieDetails-readLess'),
+                        handlePress
+                      )
                     }
                   >
-                    <Text style={{...styles.subTitleInfo, color: colors.blue,}}>{overview}</Text>
+                    <Text
+                      style={{ ...styles.subTitleInfo, color: colors.blue }}
+                    >
+                      {overview}
+                    </Text>
                   </ReadMore>
                 </SectionRow>
-                <SectionRow title={t("movieDetails-mainCast")}>
+                <SectionRow title={t('movieDetails-mainCast')}>
                   <PersonListRow
                     data={cast}
                     type="character"
@@ -250,7 +335,7 @@ const MovieDetails = ({ navigation, route }) => {
                     renderItem={renderItem}
                   />
                 </SectionRow>
-                <SectionRow title={t("movieDetails-mainTech")}>
+                <SectionRow title={t('movieDetails-mainTech')}>
                   <PersonListRow
                     data={crew}
                     type="job"
@@ -260,7 +345,7 @@ const MovieDetails = ({ navigation, route }) => {
                     renderItem={renderItem}
                   />
                 </SectionRow>
-                <SectionRow title={t("movieDetails-producer")} isLast>
+                <SectionRow title={t('movieDetails-producer')} isLast>
                   <PersonListRow
                     data={productionCompanies}
                     type="production"

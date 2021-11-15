@@ -32,7 +32,6 @@ export default async function request(url, content = {}, debug = false) {
     include_adult: hasAdultContent,
     language: LanguageKey
   };
-  console.log(defaultContent)
   const obj = {...defaultContent, ...content };
 
   const response = await fetch(`${api}/${url}?${queryString(obj)}`);

@@ -29,6 +29,7 @@ const translationsVn = {
   "setting-shareMessage" : "Xem nhiều phim hơn tại",
   "setting-rate" : "Bạn sẽ được chuyển hướng đến cửa hàng",
   "setting-signout": "Đăng xuất",
+  "setting-history": "Lịch sử",
   "movieDetails-readMore" : "Xem thêm ",
   "movieDetails-readLess" : "Rút gọn",
   "movieDetails-mainCast" : "Diễn viên",
@@ -37,5 +38,6 @@ const translationsVn = {
   "movieList-filterPopular" : "Phổ biến nhất",
   "movieList-loadMore" : "Xem thêm",
   "movieList-textError": "Không có kết quả",
+  "movieList-favorite": "Danh sách yêu thích"
 }
 export default translationsVn;

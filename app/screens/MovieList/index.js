@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react';
 import { View, Text } from 'react-native';
 import { Asset } from 'expo-asset';
 import { Feather } from '@expo/vector-icons';
@@ -10,7 +10,9 @@ import FilterModal from '../../components/modals/FilterModal';
 import MovieListRow from '../../components/cards/rows/MovieListRow';
 import MovieRow from '../../components/cards/rows/MovieRow';
 import { TouchableOpacity } from '../../components/common/TouchableOpacity';
-
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import ThemeContext from '../../components/context/ThemeContext';
 import request from '../../services/api';
 
 import { getTodayDate } from '../../utils/dates';
@@ -18,27 +20,31 @@ import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import styles from './styles';
 
-const MovieList = ({ navigation, route }) => {
-  const {t} = useTranslation();
-  const {colors} = useTheme()
+import { AuthenticatedUserContext } from '../../components/context/AuthenticatedUserProvider';
+const MovieList = ({ navigation, route, isFavorite }) => {
+  // const user = firebase.auth().currentUser;
+  const { user } = useContext(AuthenticatedUserContext);
+  const db = firebase.firestore();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false);
   const [isError, setIsError] = useState(false);
-
+  const [favoriteList, setFavoriteList] = useState([]);
   const [results, setResults] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [filter, setFilter] = useState({
     type: 'popularity.desc',
-    name: t("movieList-filterPopular")
+    name: t('movieList-filterPopular')
   });
   const [view, setView] = useState({ numColumns: 1, keyGrid: 1 });
+  const [resetPageS, setResetPageS] = useState(null);
   const filterModalRef = useRef(null);
 
-  const {
-    params: { id = null, name = null, typeRequest = 'discover' } = {}
-  } = route;
+  const { params: { id = null, name = null, typeRequest = 'discover' } = {} } =
+    route;
 
   const getQueryRequest = () => {
     if (typeRequest === 'discover') {
@@ -66,13 +72,23 @@ const MovieList = ({ navigation, route }) => {
         with_release_type: '1|2|3|4|5|6|7',
         ...getQueryRequest()
       });
+      // console.log(data);
       setIsLoading(false);
       setIsLoadingMore(false);
       setIsRefresh(false);
       setIsError(false);
       setTotalPages(data.total_pages);
       setPage(data.page);
-      setResults(resetPage ? data.results : [...results, ...data.results]);
+      setResetPageS(resetPage)
+      // setData(data)
+      if (!isFavorite) {
+        setResults(resetPage ? data.results : [...results, ...data.results]);
+      } else if (isFavorite) {
+        const array = data.results.filter(
+          (item) => favoriteList.indexOf(item.id) >= 0
+        );
+        setResults(resetPage ? array : [...results, ...array]);
+      }
     } catch (err) {
       setIsLoading(false);
       setIsLoadingMore(false);
@@ -131,10 +147,12 @@ const MovieList = ({ navigation, route }) => {
       return (
         <View style={styles.loadingMore}>
           <TouchableOpacity
-            style={{...styles.loadingButton, borderColor: colors.lightGray}}
+            style={{ ...styles.loadingButton, borderColor: colors.lightGray }}
             onPress={handleLoadMore}
           >
-            <Text style={{...styles.loadingText, color: colors.darkBlue,}}>{t("movieList-loadMore")}</Text>
+            <Text style={{ ...styles.loadingText, color: colors.darkBlue }}>
+              {t('movieList-loadMore')}
+            </Text>
           </TouchableOpacity>
         </View>
       );
@@ -159,6 +177,16 @@ const MovieList = ({ navigation, route }) => {
   }, [navigation]);
 
   useEffect(() => {
+    // UseEffect chạy lần đầu, lấy dữ liệu cho favoriteList
+    const unsubscribe = db.collection('users')
+    .doc(user.uid)
+    .onSnapshot((query) => {
+      return setFavoriteList(query.data().listFav);
+    });
+    return () => unsubscribe()
+  }, []);
+  useEffect(() => {
+    // listen favorite list thay đổi
     (async () => {
       try {
         Asset.loadAsync(StackAssets);
@@ -167,14 +195,21 @@ const MovieList = ({ navigation, route }) => {
         requestMoviesList();
       }
     })();
-  }, []);
+  }, [favoriteList]);
 
   const { navigate } = navigation;
   const { numColumns, keyGrid } = view;
-
+  if (isFavorite && results.length === 0) {
+    // Nếu chưa thêm gì vào danh sách yêu thích. style phần return
+    return (
+      <View>
+        <Text>Danh sách yêu thích của bạn hiện đang trống</Text>
+      </View>
+    );
+  }
   return (
     <Screen>
-      <View style={{...styles.container, backgroundColor: colors.white}}>
+      <View style={{ ...styles.container, backgroundColor: colors.white }}>
         {isLoading && !isRefresh && !isLoadingMore ? (
           <Spinner />
         ) : isError ? (
@@ -182,19 +217,23 @@ const MovieList = ({ navigation, route }) => {
         ) : results.length === 0 ? (
           <NotificationCard
             icon="thumbs-down"
-            textError= {t("movieList-textError")}
+            textError={t('movieList-textError')}
           />
         ) : (
           <View style={styles.containerList}>
             {results.length > 0 && (
               <View style={styles.containerMainText}>
-                <Text style={{...styles.textMain, color: colors.darkBlue,}} numberOfLines={1}>
-                  {typeRequest === 'discover' ? filter.name : name}
+                <Text
+                  style={{ ...styles.textMain, color: colors.darkBlue }}
+                  numberOfLines={1}
+                >
+                  {isFavorite ? t('movieList-favorite'): typeRequest === 'discover' ? filter.name : name}
+                  
                 </Text>
                 <TouchableOpacity
                   style={[
                     styles.buttonGrid,
-                    numColumns === 2 && {backgroundColor: colors.lightGray}
+                    numColumns === 2 && { backgroundColor: colors.lightGray }
                   ]}
                   onPress={handleGrid}
                 >

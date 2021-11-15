@@ -13,14 +13,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import styles from './styles';
-import Firebase from '../../config/firebase';
+
+import { getImageApi } from '../../utils/images';
+import { Image } from '../../components/common/Image';
+
 import { IconButton } from '../../components/auth/';
 import { AuthenticatedUserContext } from '../../components/context/AuthenticatedUserProvider';
-const auth = Firebase.auth();
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+// const auth = Firebase.auth();
+
 const Configuration = () => {
   const { t } = useTranslation();
   const { user } = useContext(AuthenticatedUserContext);
-  console.log(user);
+  const db = firebase.firestore();
+  const [historyList, setHistoryList] = useState([]);
   const theme = useTheme();
   const { colors } = useTheme();
   const [hasAdultContent, setHasAdultContent] = useState(false);
@@ -77,6 +84,14 @@ const Configuration = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = db
+      .collection('users')
+      .doc(user.uid)
+      .onSnapshot((query) => setHistoryList(query.data().listHis));
+    return () => unsubscribe();
+  }, []);
   useEffect(() => {
     (async () => {
       try {
@@ -95,12 +110,41 @@ const Configuration = () => {
         showError();
       }
     })();
-  }, [hasAdultContent]);
+  }, []);
 
   return (
     <Screen>
       <ScrollView style={{ backgroundColor: colors.white }}>
         <View style={{ ...styles.container, backgroundColor: colors.white }}>
+          <View style={styles.section}>
+            <Text
+              style={[
+                styles.itemText,
+                styles.sectionText,
+                { color: colors.darkBlue }
+              ]}
+              numberOfLines={2}
+            >
+              {t('setting-history')}
+            </Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {historyList.map((item, index) => {
+                // Style banner phim tại đây
+                // mỗi item là backDropPath của phim. Kết hợp với hàm getImageApi sẽ lấy được api phim 
+                // getImageApi(item) = {uri:"...api..."
+                // return <Image key={item} style={styles.img} source={url} />;
+                return (
+                  <Image
+                  key={index}
+                  uri={getImageApi(item)}
+                  width={50}
+                  height={100}
+                  style={{}}
+                />
+                )
+              })}
+            </ScrollView>
+          </View>
           <View style={styles.section}>
             <Text
               style={[
@@ -274,7 +318,6 @@ const Configuration = () => {
               </Text>
             </View>
           </View>
-
         </View>
       </ScrollView>
     </Screen>

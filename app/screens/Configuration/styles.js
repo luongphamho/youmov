@@ -36,6 +36,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 5
+  },
+  img: {
+    width:50,
+    maxHeight:100
   }
 });
 

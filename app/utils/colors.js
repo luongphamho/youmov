@@ -18,7 +18,7 @@ export const CustromDefaultTheme = {
     pink: '#f95f62',
     lightRed: '#ff7f7f',
     lightYellow: '#eab079',
-    lightGreen: '#82c596'
+    lightGreen: '#82c596',
   }
 };
 export const CustomDarkTheme = {
@@ -36,6 +36,6 @@ export const CustomDarkTheme = {
     pink: '#f95f62',
     lightRed: '#ff7f7f',
     lightYellow: '#eab079',
-    lightGreen: '#82c596'
+    lightGreen: '#82c596',
   }
 };

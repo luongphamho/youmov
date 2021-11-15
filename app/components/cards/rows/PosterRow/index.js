@@ -6,12 +6,13 @@ import ImagesModal from '../../../modals/ImagesModal';
 import VideoModal from '../../../modals/VideoModal';
 import { TouchableOpacity } from '../../../common/TouchableOpacity';
 import { Image } from '../../../common/Image';
-
+// import {updateFavorite} from '../../../../services/users'
 import { getResponsiveWidth } from '../../../../utils/dimensions';
 import { getImageApi } from '../../../../utils/images';
 import { getAvarageRating } from '../../../../utils/rating';
 
 import styles from './styles';
+import { Button } from '../../../auth';
 
 const PLAY_WIDTH = getResponsiveWidth(7);
 const STAR_HEIGHT = getResponsiveWidth(6);
@@ -23,14 +24,53 @@ const PosterRow = ({
   images,
   video,
   showImage,
-  onPress
+  onPress,
+  handdleAdd,
+  handdleRemove,
+  isAdd,
+  filmId,
+  handleHistory
 }) => {
   const videoModalRef = useRef(null);
-
   const handlePlayVideo = () => {
-    videoModalRef.current?.open();
+    handleHistory(backdropPath)
+    // videoModalRef.current?.open();
   };
-  const {colors} = useTheme();
+  const { colors } = useTheme();
+  // Hàm render nút thêm / xóa favor
+  const renderAddFavor = () => {
+    // console.log(isAdd)
+    // isAdd = true thì render trái tim hồng, onPress={handdleAdd}. Thêm vào danh sách yêu thích
+    if (isAdd) {
+      return (
+        <View >
+          <FontAwesome
+            key="like"
+            name="heart"
+            size={STAR_HEIGHT}
+            color={colors.white}
+            style={styles.star}
+            onPress={(e)=>handdleAdd(filmId)}
+          />
+        </View>
+      );
+    }
+    //isAdd = false thì render trái tim rỗng, onPress={handleRemove}. Xóa khỏi danh sách
+    if (!isAdd) {
+      return (
+        <View>
+          <FontAwesome
+            key="like"
+            name="heart"
+            size={STAR_HEIGHT}
+            color={colors.white}
+            style={styles.star}
+            onPress={(e) => handdleRemove(filmId)}
+          />
+        </View>
+      );
+    }
+  };
   return (
     <View style={styles.containerMainPhoto}>
       <Image
@@ -42,7 +82,10 @@ const PosterRow = ({
       />
       {video && video.site === 'YouTube' && (
         <>
-          <TouchableOpacity style={{...styles.play, backgroundColor: colors.pink}} onPress={handlePlayVideo}>
+          <TouchableOpacity
+            style={{ ...styles.play, backgroundColor: colors.pink }}
+            onPress={handlePlayVideo}
+          >
             <FontAwesome
               name="play"
               size={PLAY_WIDTH}
@@ -64,10 +107,13 @@ const PosterRow = ({
         onPress={images.length ? onPress : null}
       >
         <View style={styles.containerBackgroundPhotoInfo}>
-          <Text numberOfLines={2} style={{...styles.photoInfo, color: colors.white}}>
+          <Text
+            numberOfLines={2}
+            style={{ ...styles.photoInfo, color: colors.white }}
+          >
             {title}
           </Text>
-          <Text style = {{...styles.photoInfo, color: colors.white}}>
+          <Text style={{ ...styles.photoInfo, color: colors.white }}>
             {video.key}
           </Text>
           <View style={styles.photoStar}>
@@ -81,6 +127,8 @@ const PosterRow = ({
               />
             ))}
           </View>
+          {/* Hàm render nút thêm/xóa favor */}
+          {renderAddFavor(isAdd)}
         </View>
       </TouchableOpacity>
       {images.length ? (

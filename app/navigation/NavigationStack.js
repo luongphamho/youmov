@@ -34,7 +34,6 @@ i18n
 const AppNavigator = () => {
   const { t } = useTranslation();
   const themeColor = useTheme();
-
   const defaultNavigationOptions = {
     headerShown: false
   };

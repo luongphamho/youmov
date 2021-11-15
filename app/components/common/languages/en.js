@@ -29,6 +29,7 @@ const translationsEn = {
   "setting-shareMessage" : "Learn all about movies and series",
   "setting-rate" : "Nothing happens now. In the future you will be redirected to store.",
   "setting-signout": "Sign out",
+  "setting-history": "History",
   "movieDetails-readMore" : "Read more",
   "movieDetails-readLess" : "Read less",
   "movieDetails-mainCast" : "Main cast",
@@ -37,5 +38,6 @@ const translationsEn = {
   "movieList-filterPopular" : "Most popular",
   "movieList-loadMore" : "Load more",
   "movieList-textError": "No results available.",
+  "movieList-favorite": "Your favorite films"
 }
 export default translationsEn;
