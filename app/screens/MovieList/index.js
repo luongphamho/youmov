@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useContext
+} from 'react';
 import { View, Text } from 'react-native';
 import { Asset } from 'expo-asset';
 import { Feather } from '@expo/vector-icons';
@@ -40,7 +46,7 @@ const MovieList = ({ navigation, route, isFavorite }) => {
     name: t('movieList-filterPopular')
   });
   const [view, setView] = useState({ numColumns: 1, keyGrid: 1 });
-  const [resetPageS, setResetPageS] = useState(null);
+  // const [resetPageS, setResetPageS] = useState(null);
   const filterModalRef = useRef(null);
 
   const { params: { id = null, name = null, typeRequest = 'discover' } = {} } =
@@ -79,7 +85,7 @@ const MovieList = ({ navigation, route, isFavorite }) => {
       setIsError(false);
       setTotalPages(data.total_pages);
       setPage(data.page);
-      setResetPageS(resetPage)
+      // setResetPageS(resetPage)
       // setData(data)
       if (!isFavorite) {
         setResults(resetPage ? data.results : [...results, ...data.results]);
@@ -178,12 +184,13 @@ const MovieList = ({ navigation, route, isFavorite }) => {
 
   useEffect(() => {
     // UseEffect chạy lần đầu, lấy dữ liệu cho favoriteList
-    const unsubscribe = db.collection('users')
-    .doc(user.uid)
-    .onSnapshot((query) => {
-      return setFavoriteList(query.data().listFav);
-    });
-    return () => unsubscribe()
+    const unsubscribe = db
+      .collection('users')
+      .doc(user.uid)
+      .onSnapshot((query) => {
+        return setFavoriteList(query.data().listFav);
+      });
+    return () => unsubscribe();
   }, []);
   useEffect(() => {
     // listen favorite list thay đổi
@@ -191,10 +198,13 @@ const MovieList = ({ navigation, route, isFavorite }) => {
       try {
         Asset.loadAsync(StackAssets);
         requestMoviesList();
+        
+        console.log(favoriteList)
       } catch (error) {
         requestMoviesList();
       }
     })();
+    
   }, [favoriteList]);
 
   const { navigate } = navigation;
@@ -207,6 +217,7 @@ const MovieList = ({ navigation, route, isFavorite }) => {
       </View>
     );
   }
+  // forceUpdate()
   return (
     <Screen>
       <View style={{ ...styles.container, backgroundColor: colors.white }}>
@@ -227,8 +238,11 @@ const MovieList = ({ navigation, route, isFavorite }) => {
                   style={{ ...styles.textMain, color: colors.darkBlue }}
                   numberOfLines={1}
                 >
-                  {isFavorite ? t('movieList-favorite'): typeRequest === 'discover' ? filter.name : name}
-                  
+                  {isFavorite
+                    ? t('movieList-favorite')
+                    : typeRequest === 'discover'
+                    ? filter.name
+                    : name}
                 </Text>
                 <TouchableOpacity
                   style={[
