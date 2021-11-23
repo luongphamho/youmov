@@ -4,8 +4,14 @@ const translationsEn = {
   "inputSearch-search": "Search",
   "filterModal-title" : "Filter",
   "filterModal-date" : "Date",
+  "filterModal-date-releases": "Releases",
+  "filterModal-date-old": "Old",
   "filterModal-optionTitle-populary" : "Popularity",
+  "filterModal-optionTitle-most" : "Most popular",
+  "filterModal-optionTitle-less" : "Less popular",
   "filterModal-optionTitle-revenue" : "Revenue",
+  "filterModal-optionTitle-hight" : "Higher revenue",
+  "filterModal-optionTitle-low" : "Lowest revenue",
   "filterModal-optionTitle-btnText" : "Confirm",
   "personModal-infoTitle" : "Biography",
   "personModal-name" : "name",
@@ -38,6 +44,7 @@ const translationsEn = {
   "movieList-filterPopular" : "Most popular",
   "movieList-loadMore" : "Load more",
   "movieList-textError": "No results available.",
-  "movieList-favorite": "Your favorite films"
+  "movieList-favorite": "Your favorite films",
+  "filmLink-error": "Film not avaiable",
 }
 export default translationsEn;

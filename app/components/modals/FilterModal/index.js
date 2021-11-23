@@ -47,13 +47,13 @@ const FilterModal = forwardRef(
                   {t("filterModal-date")}
                 </Text>
                 <Filter
-                  title="Releases"
+                  title={t("filterModal-date-releases")}
                   type="release_date.desc"
                   selected={type}
                   onChange={changeValues}
                 />
                 <Filter
-                  title="Old"
+                  title={t("filterModal-date-old")}
                   type="release_date.asc"
                   selected={type}
                   onChange={changeValues}
@@ -64,13 +64,13 @@ const FilterModal = forwardRef(
                   {t("filterModal-optionTitle-populary")}
                 </Text>
                 <Filter
-                  title="Most popular"
+                  title={t("filterModal-optionTitle-most")}
                   type="popularity.desc"
                   selected={type}
                   onChange={changeValues}
                 />
                 <Filter
-                  title="Less popular"
+                  title={t("filterModal-optionTitle-less")}
                   type="popularity.asc"
                   selected={type}
                   onChange={changeValues}
@@ -81,13 +81,13 @@ const FilterModal = forwardRef(
                   {t("filterModal-optionTitle-revenue")}
                 </Text>
                 <Filter
-                  title="Higher revenue"
+                  title={t("filterModal-optionTitle-hight")}
                   type="revenue.desc"
                   selected={type}
                   onChange={changeValues}
                 />
                 <Filter
-                  title="Lowest revenue"
+                  title={t("filterModal-optionTitle-low")}
                   type="revenue.asc"
                   selected={type}
                   onChange={changeValues}

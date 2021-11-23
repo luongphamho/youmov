@@ -156,7 +156,6 @@ const MovieDetails = ({ navigation, route }) => {
         backdropPath: data.backdrop_path || INITIAL_INFO.backdropPath,
         title: data.title || INITIAL_INFO.title,
         voteAverage: data.vote_average || INITIAL_INFO.voteAverage,
-        video: data.videos.results[0] || INITIAL_INFO.video,
         overview: data.overview || INITIAL_INFO.overview,
         cast: sliceArrayLength(data.credits.cast, 15),
         crew: sliceArrayLength(data.credits.crew, 15),
@@ -264,7 +263,6 @@ const MovieDetails = ({ navigation, route }) => {
       id,
       backdropPath,
       voteAverage,
-      video,
       title,
       infosDetail,
       overview,
@@ -291,7 +289,6 @@ const MovieDetails = ({ navigation, route }) => {
                 backdropPath={backdropPath}
                 voteAverage={voteAverage}
                 images={images}
-                video={video}
                 showImage={showImage}
                 onPress={handleImage}
                 handdleAdd={handdleAdd}

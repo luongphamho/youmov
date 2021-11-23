@@ -128,7 +128,7 @@ const Configuration = () => {
               {t('setting-history')}
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {historyList.map((item, index) => {
+              {historyList.slice(0).reverse().map((item, index) => {
                 // Style banner phim tại đây
                 // mỗi item là backDropPath của phim. Kết hợp với hàm getImageApi sẽ lấy được api phim 
                 // getImageApi(item) = {uri:"...api..."

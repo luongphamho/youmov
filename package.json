@@ -36,9 +36,6 @@
     "react-native-screens": "^3.8.0",
     "react-native-web": "~0.13.12",
     "react-native-webview": "^11.14.0",
-    "react-redux": "^7.2.5",
-    "redux": "^4.1.1",
-    "redux-thunk": "^2.4.0",
     "webview": "^1.0.0"
   },
   "devDependencies": {

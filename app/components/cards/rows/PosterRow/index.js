@@ -1,19 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import ImagesModal from '../../../modals/ImagesModal';
-import VideoModal from '../../../modals/VideoModal';
+import VideoModal from '../../../modals/VideoModal/index';
 import { TouchableOpacity } from '../../../common/TouchableOpacity';
 import { Image } from '../../../common/Image';
 // import {updateFavorite} from '../../../../services/users'
 import { getResponsiveWidth } from '../../../../utils/dimensions';
 import { getImageApi } from '../../../../utils/images';
 import { getAvarageRating } from '../../../../utils/rating';
-
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import styles from './styles';
 import { Button } from '../../../auth';
-
+import { Alert } from '../../../common/Alert';
+import { useTranslation } from 'react-i18next';
 const PLAY_WIDTH = getResponsiveWidth(7);
 const STAR_HEIGHT = getResponsiveWidth(6);
 
@@ -22,7 +24,6 @@ const PosterRow = ({
   backdropPath,
   voteAverage,
   images,
-  video,
   showImage,
   onPress,
   handdleAdd,
@@ -31,10 +32,24 @@ const PosterRow = ({
   filmId,
   handleHistory
 }) => {
+  const { t } = useTranslation();
+  const db = firebase.firestore();
   const videoModalRef = useRef(null);
+  const [video, setVideo] = useState([]);
+  const showError = () => {
+    Alert({
+      title: 'Attention',
+      description: t('filmLink-error')
+    });
+  };
   const handlePlayVideo = () => {
-    handleHistory(backdropPath)
-    // videoModalRef.current?.open();
+    handleHistory(backdropPath);
+    if (video.id === filmId) {
+      videoModalRef.current?.open();
+    }
+    if (video.id != filmId) {
+      showError();
+    }
   };
   const { colors } = useTheme();
   // Hàm render nút thêm / xóa favor
@@ -43,14 +58,14 @@ const PosterRow = ({
     // isAdd = true thì render trái tim hồng, onPress={handdleAdd}. Thêm vào danh sách yêu thích
     if (isAdd) {
       return (
-        <View >
+        <View>
           <FontAwesome
             key="like"
             name="heart"
             size={STAR_HEIGHT}
-            color={colors.white}
+            color={"#ffffff"}
             style={styles.star}
-            onPress={(e)=>handdleAdd(filmId)}
+            onPress={(e) => handdleAdd(filmId)}
           />
         </View>
       );
@@ -71,6 +86,19 @@ const PosterRow = ({
       );
     }
   };
+  useEffect(() => {
+    // console.log(filmId)
+    db.collection('video').onSnapshot((snapshot) => {
+      snapshot.docs.map((doc) => {
+        // console.log(typeof doc.data().id)
+        // console.log(doc.data().id)
+        if (doc.data().id === filmId) {
+          setVideo(doc.data());
+        }
+      });
+    });
+  }, [filmId]);
+
   return (
     <View style={styles.containerMainPhoto}>
       <Image
@@ -80,27 +108,25 @@ const PosterRow = ({
         width="100%"
         height="100%"
       />
-      {video && video.site === 'YouTube' && (
-        <>
-          <TouchableOpacity
-            style={{ ...styles.play, backgroundColor: colors.pink }}
-            onPress={handlePlayVideo}
-          >
-            <FontAwesome
-              name="play"
-              size={PLAY_WIDTH}
-              color={colors.white}
-              style={styles.buttonPlay}
-            />
-          </TouchableOpacity>
-          <VideoModal
-            ref={videoModalRef}
-            keyId={video.key}
-            style={styles.bottomModal}
-            onClose={handlePlayVideo}
+      <>
+        <TouchableOpacity
+          style={{ ...styles.play, backgroundColor: colors.pink }}
+          onPress={handlePlayVideo}
+        >
+          <FontAwesome
+            name="play"
+            size={PLAY_WIDTH}
+            color={colors.white}
+            style={styles.buttonPlay}
           />
-        </>
-      )}
+        </TouchableOpacity>
+        <VideoModal
+          ref={videoModalRef}
+          keyId={video.key}
+          style={styles.bottomModal}
+          onClose={handlePlayVideo}
+        />
+      </>
       <TouchableOpacity
         style={styles.containerMainPhotoInfo}
         activeOpacity={images.length ? 0.5 : 1}
@@ -109,20 +135,18 @@ const PosterRow = ({
         <View style={styles.containerBackgroundPhotoInfo}>
           <Text
             numberOfLines={2}
-            style={{ ...styles.photoInfo, color: colors.white }}
+            style={{ ...styles.photoInfo, color: "#ffffff" }}
           >
             {title}
           </Text>
-          <Text style={{ ...styles.photoInfo, color: colors.white }}>
-            {video.key}
-          </Text>
+          <Text></Text>
           <View style={styles.photoStar}>
             {getAvarageRating(voteAverage).map((value) => (
               <FontAwesome
                 key={value}
                 name="star"
                 size={STAR_HEIGHT}
-                color={colors.white}
+                color={"#ffffff"}
                 style={styles.star}
               />
             ))}

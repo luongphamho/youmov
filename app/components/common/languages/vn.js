@@ -4,8 +4,14 @@ const translationsVn = {
   "inputSearch-search": "Tìm kiếm",
   "filterModal-title" : "Bộ lọc",
   "filterModal-date" : "Ngày",
+  "filterModal-date-releases": "Gần nhất",
+  "filterModal-date-old": "Cũ nhất",
   "filterModal-optionTitle-populary" : "Phổ biến",
+  "filterModal-optionTitle-most" : "Phổ biến nhất",
+  "filterModal-optionTitle-less" : "Ít phổ biến",
   "filterModal-optionTitle-revenue" : "Doanh thu",
+  "filterModal-optionTitle-hight" : "Doanh thu cao nhất",
+  "filterModal-optionTitle-low" : "Doanh thu thấp nhất",
   "filterModal-optionTitle-btnText" : "Xác nhận",
   "personModal-infoTitle" : "Tiểu sử",
   "personModal-name" : "tên",
@@ -38,6 +44,7 @@ const translationsVn = {
   "movieList-filterPopular" : "Phổ biến nhất",
   "movieList-loadMore" : "Xem thêm",
   "movieList-textError": "Không có kết quả",
-  "movieList-favorite": "Danh sách yêu thích"
+  "movieList-favorite": "Danh sách yêu thích",
+  "filmLink-error": "Phim hiện tại chưa có",
 }
 export default translationsVn;

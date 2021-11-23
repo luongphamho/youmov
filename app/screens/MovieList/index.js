@@ -198,8 +198,6 @@ const MovieList = ({ navigation, route, isFavorite }) => {
       try {
         Asset.loadAsync(StackAssets);
         requestMoviesList();
-        
-        console.log(favoriteList)
       } catch (error) {
         requestMoviesList();
       }
