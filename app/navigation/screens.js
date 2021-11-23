@@ -94,7 +94,7 @@ export const SearchStackScreen = () => {
       <SearchStack.Screen
         name={ROUTES.SEARCH_RESULTS}
         component={MovieList}
-        options={{ title: 'Search results' }}
+        options={{ title: t('search-results') }}
       />
       <SearchStack.Screen
         name={ROUTES.MOVIE_DETAILS}

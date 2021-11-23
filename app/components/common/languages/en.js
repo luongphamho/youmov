@@ -2,6 +2,7 @@ const translationsEn = {
   "notificationCard-error":"Something wrong has happened, please try again later.",
   "notificationCard-textBtn" : "load",
   "inputSearch-search": "Search",
+  "search-results": "Search results",
   "filterModal-title" : "Filter",
   "filterModal-date" : "Date",
   "filterModal-date-releases": "Releases",

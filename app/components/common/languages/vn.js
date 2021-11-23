@@ -2,6 +2,7 @@ const translationsVn = {
   "notificationCard-error":"Có lỗi xảy ra, vui lòng thử lại sau",
   "notificationCard-textBtn" : "tải",
   "inputSearch-search": "Tìm kiếm",
+  "search-results": "Kết quả tìm kiếm",
   "filterModal-title" : "Bộ lọc",
   "filterModal-date" : "Ngày",
   "filterModal-date-releases": "Gần nhất",
