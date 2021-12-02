@@ -45,12 +45,14 @@ export default function SignupScreen({ navigation }) {
     }
     try {
       if (email !== '' && password !== '') {
-        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        await firebase.auth().createUserWithEmailAndPassword(email, password).then((result)=>{
+          return result.user.updateProfile({displayName: name})
+        });
         const currentUser = firebase.auth().currentUser;
         const db = firebase.firestore();
         db.collection('users').doc(currentUser.uid).set({
           email: currentUser.email,
-          name: name,
+          // name: name,
           listHis: [],
           listFav: []
         });

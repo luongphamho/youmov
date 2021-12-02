@@ -83,7 +83,7 @@ const Configuration = () => {
       console.log(error);
     }
   };
-
+  console.log(user)
   useEffect(() => {
     const unsubscribe = db
       .collection('users')
