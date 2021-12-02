@@ -21,7 +21,6 @@ import { IconButton } from '../../components/auth/';
 import { AuthenticatedUserContext } from '../../components/context/AuthenticatedUserProvider';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-// const auth = Firebase.auth();
 
 const Configuration = () => {
   const { t } = useTranslation();

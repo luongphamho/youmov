@@ -210,9 +210,32 @@ const MovieList = ({ navigation, route, isFavorite }) => {
   if (isFavorite && results.length === 0) {
     // Nếu chưa thêm gì vào danh sách yêu thích. style phần return
     return (
-      <View>
-        <Text>Danh sách yêu thích của bạn hiện đang trống</Text>
+      <Screen>
+      <View style={{ ...styles.container, backgroundColor: colors.white }}>
+        {isLoading && !isRefresh && !isLoadingMore ? (
+          <Spinner />
+        ) : isError ? (
+          <NotificationCard icon="alert-octagon" onPress={requestMoviesList} />
+        ) : results.length === 0 ? (
+          <NotificationCard
+            icon="thumbs-down"
+            textError={t('movieList-textError')}
+          />
+        ) : (
+          <View>
+          <Text>Danh sách yêu thích của bạn hiện đang trống</Text>
+        </View>
+        )}
+        <FilterModal
+          ref={filterModalRef}
+          filter={filter}
+          onVisible={handleFilterModal}
+          onFilter={handleSwitchMovie}
+          style={styles.bottomModal}
+        />
       </View>
+    </Screen>
+
     );
   }
   // forceUpdate()

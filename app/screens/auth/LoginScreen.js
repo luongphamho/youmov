@@ -26,6 +26,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   const onLogin = async () => {
+    setLoginError('')
     try {
       if (email !== '' && password !== '') {
         await AsyncStorage.setItem('@user', email);
@@ -37,6 +38,9 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  const goToForgotPassword = () => {
+    navigation.navigate('ForgotPassword')
+  }
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
@@ -88,6 +92,7 @@ export default function LoginScreen({ navigation }) {
           marginBottom: 24
         }}
       />
+      <Text onPress={goToForgotPassword}>Forgot password </Text>
       <RNButton
         onPress={() => navigation.navigate('Signup')}
         title='Go to Signup'
