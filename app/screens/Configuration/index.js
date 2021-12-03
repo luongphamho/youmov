@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, Modal, Button } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { Feather } from '@expo/vector-icons';
@@ -16,7 +16,7 @@ import styles from './styles';
 
 import { getImageApi } from '../../utils/images';
 import { Image } from '../../components/common/Image';
-
+import { InputField } from '../../components/auth/index';
 import { IconButton } from '../../components/auth/';
 import { AuthenticatedUserContext } from '../../components/context/AuthenticatedUserProvider';
 import firebase from 'firebase/app';
@@ -31,7 +31,33 @@ const Configuration = () => {
   const { colors } = useTheme();
   const [hasAdultContent, setHasAdultContent] = useState(false);
   const [toggleLanguage, setToggleLanguage] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { handleChangeTheme } = useContext(ThemeContext);
+  const [passwordVisibility2, setPasswordVisibility2] = useState(true);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [rightIcon, setRightIcon] = useState('eye');
+  const [rightIcon2, setRightIcon2] = useState('eye');
+  const [changePasswordError, setChangePasswordError] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const handlePasswordVisibility = () => {
+    if (rightIcon === 'eye') {
+      setRightIcon('eye-off');
+      setPasswordVisibility(!passwordVisibility);
+    } else if (rightIcon === 'eye-off') {
+      setRightIcon('eye');
+      setPasswordVisibility(!passwordVisibility);
+    }
+  };
+  const handlePasswordVisibility2 = () => {
+    if (rightIcon2 === 'eye') {
+      setRightIcon2('eye-off');
+      setPasswordVisibility2(!passwordVisibility2);
+    } else if (rightIcon2 === 'eye-off') {
+      setRightIcon2('eye');
+      setPasswordVisibility2(!passwordVisibility2);
+    }
+  };
   const handleLanguage = async (value) => {
     setToggleLanguage(value);
     if (value === true) {
@@ -44,6 +70,54 @@ const Configuration = () => {
     }
   };
 
+  const handleViewInfo = () => {
+    Alert({
+      title: t('setting-infoTitle'),
+      description:
+        t('setting-username') +
+        ': ' +
+        user.displayName +
+        '\n' +
+        t('setting-email') +
+        ': ' +
+        user.email
+    });
+  };
+
+  const reAuthenticating = (oldPassword) => {
+    var cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
+    return user.reauthenticateWithCredential(cred)
+  }
+
+  const handleChangePassword = () => {
+    reAuthenticating(oldPassword).then(()=>{
+      user.updatePassword(newPassword).then(()=>{
+        Alert({
+          // title: 'Attention',
+          description: t('setting-password-successfull')
+        });
+        setModalVisible(!modalVisible);
+        setOldPassword('');
+        setNewPassword('');
+      }).catch((error) => {
+        Alert({
+          // title: 'Attention',
+          description: error.message
+        });
+      })
+    }).catch((error) => {
+      Alert({
+        // title: 'Attention',
+        description: error.message
+      });
+    });
+
+
+  };
+
+  const toggleModalPassword = () => {
+    setModalVisible(!modalVisible);
+  };
   const handleChangeAdultContent = async (value) => {
     try {
       setHasAdultContent(value);
@@ -83,7 +157,77 @@ const Configuration = () => {
       console.log(error);
     }
   };
-  console.log(user)
+  const renderModalPassContent = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#000000aa'
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: '#ffffff',
+            margin: 50,
+            padding: 10,
+            borderRadius: 10,
+            flex: 1
+          }}
+        >
+          <Text>{t('setting-password-title')}</Text>
+          <Text>{t('setting-password-oldpass')}</Text>
+          <InputField
+            inputStyle={{
+              fontSize: 14
+            }}
+            containerStyle={{
+              backgroundColor: '#fff',
+              marginBottom: 20
+            }}
+            leftIcon="lock"
+            placeholder="Enter password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry={passwordVisibility}
+            textContentType="password"
+            rightIcon={rightIcon}
+            value={oldPassword}
+            onChangeText={(text) => setOldPassword(text)}
+            handlePasswordVisibility={handlePasswordVisibility}
+          />
+          <Text>{t('setting-password-newpass')}</Text>
+          <InputField
+            inputStyle={{
+              fontSize: 14
+            }}
+            containerStyle={{
+              backgroundColor: '#fff',
+              marginBottom: 20
+            }}
+            leftIcon="lock"
+            placeholder="Enter new password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry={passwordVisibility2}
+            textContentType="password"
+            rightIcon={rightIcon2}
+            value={newPassword}
+            onChangeText={(text) => setNewPassword(text)}
+            handlePasswordVisibility={handlePasswordVisibility2}
+          />
+          <Button
+            title={t('setting-password-cancel')}
+            onPress={() => setModalVisible(!modalVisible)}
+          />
+
+          <Button
+            title={t('setting-password-ok')}
+            onPress={() => handleChangePassword()}
+          />
+        </View>
+      </View>
+    );
+  };
   useEffect(() => {
     const unsubscribe = db
       .collection('users')
@@ -124,24 +268,93 @@ const Configuration = () => {
               ]}
               numberOfLines={2}
             >
+              {t('setting-user')}
+            </Text>
+            <TouchableOpacity onPress={handleViewInfo}>
+              <View
+                style={{
+                  ...styles.item,
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }}
+              >
+                <Text
+                  style={{ ...styles.itemText, color: colors.darkBlue }}
+                  numberOfLines={2}
+                >
+                  {t('setting-viewInfo')}
+                </Text>
+                <Feather
+                  name="user"
+                  size={22}
+                  color={colors.darkBlue}
+                  style={styles.icon}
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={toggleModalPassword}>
+              <View
+                style={{
+                  ...styles.item,
+                  backgroundColor: colors.white,
+                  borderBottomColor: colors.lightGray
+                }}
+              >
+                <Text
+                  style={{ ...styles.itemText, color: colors.darkBlue }}
+                  numberOfLines={2}
+                >
+                  {t('setting-changePassword')}
+                </Text>
+                <Feather
+                  name="lock"
+                  size={22}
+                  color={colors.darkBlue}
+                  style={styles.icon}
+                />
+              </View>
+            </TouchableOpacity>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              {renderModalPassContent()}
+            </Modal>
+          </View>
+          <View style={styles.section}>
+            <Text
+              style={[
+                styles.itemText,
+                styles.sectionText,
+                { color: colors.darkBlue }
+              ]}
+              numberOfLines={2}
+            >
               {t('setting-history')}
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {historyList.slice(0).reverse().map((item, index) => {
-                // Style banner phim tại đây
-                // mỗi item là backDropPath của phim. Kết hợp với hàm getImageApi sẽ lấy được api phim 
-                // getImageApi(item) = {uri:"...api..."
-                // return <Image key={item} style={styles.img} source={url} />;
-                return (
-                  <Image
-                  key={index}
-                  uri={getImageApi(item)}
-                  width={50}
-                  height={100}
-                  style={{}}
-                />
-                )
-              })}
+              {historyList
+                .slice(0)
+                .reverse()
+                .map((item, index) => {
+                  // Style banner phim tại đây
+                  // mỗi item là backDropPath của phim. Kết hợp với hàm getImageApi sẽ lấy được api phim
+                  // getImageApi(item) = {uri:"...api..."
+                  // return <Image key={item} style={styles.img} source={url} />;
+                  return (
+                    <Image
+                      key={index}
+                      uri={getImageApi(item)}
+                      width={50}
+                      height={100}
+                      style={{}}
+                    />
+                  );
+                })}
             </ScrollView>
           </View>
           <View style={styles.section}>

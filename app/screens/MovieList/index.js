@@ -202,7 +202,6 @@ const MovieList = ({ navigation, route, isFavorite }) => {
         requestMoviesList();
       }
     })();
-    
   }, [favoriteList]);
 
   const { navigate } = navigation;
@@ -211,31 +210,53 @@ const MovieList = ({ navigation, route, isFavorite }) => {
     // Nếu chưa thêm gì vào danh sách yêu thích. style phần return
     return (
       <Screen>
-      <View style={{ ...styles.container, backgroundColor: colors.white }}>
-        {isLoading && !isRefresh && !isLoadingMore ? (
-          <Spinner />
-        ) : isError ? (
-          <NotificationCard icon="alert-octagon" onPress={requestMoviesList} />
-        ) : results.length === 0 ? (
-          <NotificationCard
-            icon="thumbs-down"
-            textError={t('movieList-textError')}
-          />
-        ) : (
-          <View>
-          <Text>Danh sách yêu thích của bạn hiện đang trống</Text>
+        <View style={{ ...styles.container, backgroundColor: colors.white }}>
+          {isLoading && !isRefresh && !isLoadingMore ? (
+            <Spinner />
+          ) : isError ? (
+            <NotificationCard
+              icon="alert-octagon"
+              onPress={requestMoviesList}
+            />
+          ) : (
+            <View style={styles.containerList}>
+              <View style={styles.containerMainText}>
+                <Text
+                  style={{ ...styles.textMain, color: colors.darkBlue }}
+                  numberOfLines={1}
+                >
+                  {isFavorite
+                    ? t('movieList-favorite')
+                    : typeRequest === 'discover'
+                    ? filter.name
+                    : name}
+                </Text>
+                <TouchableOpacity
+                  style={[
+                    styles.buttonGrid,
+                    numColumns === 2 && { backgroundColor: colors.lightGray }
+                  ]}
+                  onPress={handleGrid}
+                >
+                  <Feather name="grid" size={22} color={colors.darkBlue} />
+                </TouchableOpacity>
+              </View>
+              <MovieListRow
+              data={results}
+              type="normal"
+              isSearch={false}
+              keyGrid={keyGrid}
+              numColumns={numColumns}
+              refreshing={isRefresh}
+              onRefresh={handleRefresh}
+              ListFooterComponent={renderFooter}
+              navigate={navigate}
+              renderItem={renderItem}
+            />
+          </View>
+          )}
         </View>
-        )}
-        <FilterModal
-          ref={filterModalRef}
-          filter={filter}
-          onVisible={handleFilterModal}
-          onFilter={handleSwitchMovie}
-          style={styles.bottomModal}
-        />
-      </View>
-    </Screen>
-
+      </Screen>
     );
   }
   // forceUpdate()
