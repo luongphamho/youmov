@@ -40,7 +40,11 @@ const styles = StyleSheet.create({
   img: {
     width:50,
     maxHeight:100
-  }
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: '#000000aa'
+  },
 });
 
 export default styles;

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 import {
   getResponsiveFontSize,
@@ -53,7 +54,15 @@ const styles = StyleSheet.create({
     margin: 0
   },
   star: {
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: -30
+  },
+  heart: {
+    marginRight: 5,
+    bottom: -40,
+    fontSize: getResponsiveFontSize(5.8),
+    borderColor: '#FFC0CB',
+    textShadowColor: '#FFC0CB'
   }
 });
 

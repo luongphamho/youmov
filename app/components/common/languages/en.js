@@ -47,7 +47,7 @@ const translationsEn = {
   "setting-version" : "Version",
   "setting-shareMessage" : "Learn all about movies and series",
   "setting-rate" : "Nothing happens now. In the future you will be redirected to store.",
-  "setting-signout": "Sign out",
+  "setting-signout": "Log out",
   "setting-history": "History",
   "movieDetails-readMore" : "Read more",
   "movieDetails-readLess" : "Read less",

@@ -64,7 +64,7 @@ const PosterRow = ({
             name="heart"
             size={STAR_HEIGHT}
             color={"#ffffff"}
-            style={styles.star}
+            style={styles.heart}
             onPress={(e) => handdleAdd(filmId)}
           />
         </View>
@@ -78,8 +78,8 @@ const PosterRow = ({
             key="like"
             name="heart"
             size={STAR_HEIGHT}
-            color={colors.white}
-            style={styles.star}
+            color={colors.pink}
+            style={styles.heart}
             onPress={(e) => handdleRemove(filmId)}
           />
         </View>

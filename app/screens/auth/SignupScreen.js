@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
+import { StyleSheet, Text, View, Button as RNButton, ImageBackground } from 'react-native';
 
 import { Button, InputField, ErrorMessage } from '../../components/auth/index';
 import Firebase from '../../config/firebase';
@@ -62,9 +62,13 @@ export default function SignupScreen({ navigation }) {
     }
   };
 
+  const image = {uri : "https://github.com/khanhhung142/Group6/blob/master/src/pages/Auth/images/backapp.jpg?raw=true"};
+  
   return (
     <View style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <StatusBar style="dark-content" />
+      <View style={styles.container2}>
       <Text style={styles.title}>Create new account</Text>
       <InputField
         inputStyle={{
@@ -141,7 +145,7 @@ export default function SignupScreen({ navigation }) {
       {signupError ? <ErrorMessage error={signupError} visible={true} /> : null}
       <Button
         onPress={onHandleSignup}
-        backgroundColor="#f57c00"
+        backgroundColor="#F35369"
         title="Signup"
         tileColor="#fff"
         titleSize={20}
@@ -149,11 +153,14 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 24
         }}
       />
-      <RNButton
+      <Button
         onPress={() => navigation.navigate('Login')}
         title="Go to Login"
-        color="#fff"
+        backgroundColor="#1B84F5"
+        titleSize={20}
       />
+      </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -161,15 +168,21 @@ export default function SignupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e93b81',
-    paddingTop: 50,
-    paddingHorizontal: 12
+  },
+  container2: {
+    flex: 1,
+    paddingTop: 80,
+    paddingHorizontal: 20
   },
   title: {
-    fontSize: 24,
+    fontSize: 35,
     fontWeight: '600',
     color: '#fff',
     alignSelf: 'center',
     paddingBottom: 24
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center"
   }
 });

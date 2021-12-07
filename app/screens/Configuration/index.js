@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import styles from './styles';
-
+import Carousel from 'react-native-snap-carousel';
 import { getImageApi } from '../../utils/images';
 import { Image } from '../../components/common/Image';
 import { InputField } from '../../components/auth/index';
@@ -21,6 +21,7 @@ import { IconButton } from '../../components/auth/';
 import { AuthenticatedUserContext } from '../../components/context/AuthenticatedUserProvider';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { color } from 'react-native-reanimated';
 
 const Configuration = () => {
   const { t } = useTranslation();
@@ -159,19 +160,14 @@ const Configuration = () => {
   };
   const renderModalPassContent = () => {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#000000aa'
-        }}
-      >
+      <View style={styles.container2}>
         <View
           style={{
             backgroundColor: '#ffffff',
             margin: 50,
             padding: 10,
             borderRadius: 10,
-            flex: 1
+            flex: 1,
           }}
         >
           <Text>{t('setting-password-title')}</Text>
@@ -181,8 +177,9 @@ const Configuration = () => {
               fontSize: 14
             }}
             containerStyle={{
-              backgroundColor: '#fff',
-              marginBottom: 20
+              backgroundColor: '#000000aa',
+              marginBottom: 20,
+              
             }}
             leftIcon="lock"
             placeholder="Enter password"
@@ -201,8 +198,9 @@ const Configuration = () => {
               fontSize: 14
             }}
             containerStyle={{
-              backgroundColor: '#fff',
-              marginBottom: 20
+              backgroundColor: '#000000aa',
+              marginBottom: 20,
+              
             }}
             leftIcon="lock"
             placeholder="Enter new password"
@@ -215,15 +213,21 @@ const Configuration = () => {
             onChangeText={(text) => setNewPassword(text)}
             handlePasswordVisibility={handlePasswordVisibility2}
           />
+          
           <Button
             title={t('setting-password-cancel')}
             onPress={() => setModalVisible(!modalVisible)}
+            containerStyle={{
+              marginBottom: 20
+            }}
           />
 
           <Button
             title={t('setting-password-ok')}
             onPress={() => handleChangePassword()}
+            
           />
+          
         </View>
       </View>
     );
@@ -346,12 +350,15 @@ const Configuration = () => {
                   // getImageApi(item) = {uri:"...api..."
                   // return <Image key={item} style={styles.img} source={url} />;
                   return (
-                    <Image
+                      <Image
                       key={index}
                       uri={getImageApi(item)}
                       width={50}
                       height={100}
-                      style={{}}
+                      style={{
+                        padding: 100,
+                        margin: 10
+                      }}
                     />
                   );
                 })}

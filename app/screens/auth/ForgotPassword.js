@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
+import { StyleSheet, Text, View, Button as RNButton, ImageBackground } from 'react-native';
 import { Button, InputField, ErrorMessage } from '../../components/auth/index';
 import Firebase from '../../config/firebase';
 import { Alert } from '../../components/common/Alert';
@@ -30,8 +30,13 @@ export default function ForgotPassword({ navigation }) {
   const goBack = () => {
     navigation.navigate('Login')
   }
+
+  const image = {uri : "https://github.com/khanhhung142/Group6/blob/master/src/pages/Auth/images/backapp.jpg?raw=true"};
+
   return (
     <View style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <View style={styles.container2}>
       <Text style={styles.title}>Forgot password</Text>
       <InputField
         inputStyle={{
@@ -61,7 +66,9 @@ export default function ForgotPassword({ navigation }) {
           marginBottom: 24
         }}
       />
-      <Text onPress={goBack}>Go back login</Text>
+      <Text onPress={goBack} style= {styles.text}>Go back login</Text>
+      </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -69,15 +76,25 @@ export default function ForgotPassword({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e93b81',
-    paddingTop: 50,
-    paddingHorizontal: 12
+  },
+  container2: {
+    flex: 1,
+    justifyContent: "center",
+    marginHorizontal: 20
   },
   title: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: '600',
     color: '#fff',
     alignSelf: 'center',
     paddingBottom: 24
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  text: {
+    color: '#fff',
+    fontSize: 18,
   }
 });
