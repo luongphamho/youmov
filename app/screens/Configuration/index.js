@@ -13,7 +13,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import styles from './styles';
-import Carousel from 'react-native-snap-carousel';
 import { getImageApi } from '../../utils/images';
 import { Image } from '../../components/common/Image';
 import { InputField } from '../../components/auth/index';
@@ -86,34 +85,40 @@ const Configuration = () => {
   };
 
   const reAuthenticating = (oldPassword) => {
-    var cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
-    return user.reauthenticateWithCredential(cred)
-  }
+    var cred = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      oldPassword
+    );
+    return user.reauthenticateWithCredential(cred);
+  };
 
   const handleChangePassword = () => {
-    reAuthenticating(oldPassword).then(()=>{
-      user.updatePassword(newPassword).then(()=>{
-        Alert({
-          // title: 'Attention',
-          description: t('setting-password-successfull')
-        });
-        setModalVisible(!modalVisible);
-        setOldPassword('');
-        setNewPassword('');
-      }).catch((error) => {
+    reAuthenticating(oldPassword)
+      .then(() => {
+        user
+          .updatePassword(newPassword)
+          .then(() => {
+            Alert({
+              // title: 'Attention',
+              description: t('setting-password-successfull')
+            });
+            setModalVisible(!modalVisible);
+            setOldPassword('');
+            setNewPassword('');
+          })
+          .catch((error) => {
+            Alert({
+              // title: 'Attention',
+              description: error.message
+            });
+          });
+      })
+      .catch((error) => {
         Alert({
           // title: 'Attention',
           description: error.message
         });
-      })
-    }).catch((error) => {
-      Alert({
-        // title: 'Attention',
-        description: error.message
       });
-    });
-
-
   };
 
   const toggleModalPassword = () => {
@@ -165,69 +170,73 @@ const Configuration = () => {
           style={{
             backgroundColor: '#ffffff',
             margin: 50,
-            padding: 10,
+            marginBottom: 150,
+            marginTop:150,
+            padding: 15,
             borderRadius: 10,
             flex: 1,
           }}
         >
-          <Text>{t('setting-password-title')}</Text>
-          <Text>{t('setting-password-oldpass')}</Text>
-          <InputField
-            inputStyle={{
-              fontSize: 14
-            }}
-            containerStyle={{
-              backgroundColor: '#000000aa',
-              marginBottom: 20,
-              
-            }}
-            leftIcon="lock"
-            placeholder="Enter password"
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry={passwordVisibility}
-            textContentType="password"
-            rightIcon={rightIcon}
-            value={oldPassword}
-            onChangeText={(text) => setOldPassword(text)}
-            handlePasswordVisibility={handlePasswordVisibility}
-          />
-          <Text>{t('setting-password-newpass')}</Text>
-          <InputField
-            inputStyle={{
-              fontSize: 14
-            }}
-            containerStyle={{
-              backgroundColor: '#000000aa',
-              marginBottom: 20,
-              
-            }}
-            leftIcon="lock"
-            placeholder="Enter new password"
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry={passwordVisibility2}
-            textContentType="password"
-            rightIcon={rightIcon2}
-            value={newPassword}
-            onChangeText={(text) => setNewPassword(text)}
-            handlePasswordVisibility={handlePasswordVisibility2}
-          />
-          
-          <Button
-            title={t('setting-password-cancel')}
-            onPress={() => setModalVisible(!modalVisible)}
-            containerStyle={{
-              marginBottom: 20
-            }}
-          />
+          <Text style={styles.modalTitle}>{t('setting-password-title')}</Text>
+          <View style={{marginBottom:20}}>
+            <Text>{t('setting-password-oldpass')}</Text>
+            <InputField
+              inputStyle={{
+                fontSize: 14
+              }}
+              containerStyle={{
+                // backgroundColor: '#000000aa',
+                marginBottom: 20
+              }}
+              leftIcon="lock"
+              placeholder="Enter password"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={passwordVisibility}
+              textContentType="password"
+              rightIcon={rightIcon}
+              value={oldPassword}
+              onChangeText={(text) => setOldPassword(text)}
+              handlePasswordVisibility={handlePasswordVisibility}
+            />
+            <Text>{t('setting-password-newpass')}</Text>
+            <InputField
+              inputStyle={{
+                fontSize: 14
+              }}
+              containerStyle={{
+                // backgroundColor: '#000000aa',
+                marginBottom: 20
+              }}
+              leftIcon="lock"
+              placeholder="Enter new password"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={passwordVisibility2}
+              textContentType="password"
+              rightIcon={rightIcon2}
+              value={newPassword}
+              onChangeText={(text) => setNewPassword(text)}
+              handlePasswordVisibility={handlePasswordVisibility2}
+            />
+            <TouchableOpacity
+              style={{ ...styles.actions, backgroundColor: '#dc3545' }}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.actionText}>
+                {t('setting-password-cancel')}
+              </Text>
+            </TouchableOpacity>
 
-          <Button
-            title={t('setting-password-ok')}
-            onPress={() => handleChangePassword()}
-            
-          />
-          
+            <TouchableOpacity
+              style={{ ...styles.actions, backgroundColor: '#28a745' }}
+              onPress={() => handleChangePassword()}
+            >
+              <Text style={styles.actionText}>{t('setting-password-ok')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -350,7 +359,7 @@ const Configuration = () => {
                   // getImageApi(item) = {uri:"...api..."
                   // return <Image key={item} style={styles.img} source={url} />;
                   return (
-                      <Image
+                    <Image
                       key={index}
                       uri={getImageApi(item)}
                       width={50}

@@ -9,6 +9,22 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 25
   },
+  modalTitle :{
+    fontWeight:"bold",
+    fontSize:18,
+    padding:15,
+    color:"#000"
+  },
+  actions:{
+    borderRadius:5,
+    marginHorizontal:10,
+    paddingVertical:10,
+    paddingHorizontal:20,
+    marginBottom:20
+  },
+  actionText:{
+    color:"#fff"
+  },
   section: {
     marginBottom: 40
   },

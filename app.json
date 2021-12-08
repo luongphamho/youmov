@@ -1,8 +1,8 @@
 {
   "expo": {
     "entryPoint": "node_modules/expo/AppEntry.js",
-    "name": "YouMov",
-    "slug": "your-movies - Nhom7",
+    "name": "Youmov",
+    "slug": "your-movies-Nhom7",
     "description": "Find and Watch movies free",
     "version": "1.0.0",
     "privacy": "public",
@@ -16,9 +16,14 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false
+    },
+    "android": {
+      "package": "com.nhom7.Youmov"
     }
   }
 }

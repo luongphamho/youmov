@@ -61,9 +61,9 @@ const PosterRow = ({
         <View>
           <FontAwesome
             key="like"
-            name="heart"
+            name="heart-o"
             size={STAR_HEIGHT}
-            color={"#ffffff"}
+            color={colors.pink}
             style={styles.heart}
             onPress={(e) => handdleAdd(filmId)}
           />
@@ -146,7 +146,7 @@ const PosterRow = ({
                 key={value}
                 name="star"
                 size={STAR_HEIGHT}
-                color={"#ffffff"}
+                color={"#fefe00"}
                 style={styles.star}
               />
             ))}
